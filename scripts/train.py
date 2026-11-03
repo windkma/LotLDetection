@@ -8,7 +8,7 @@ from src.models.trainer import train
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train LotLDetector")
+    parser = argparse.ArgumentParser(description="Train LotlDetection")
     parser.add_argument("--platform", choices=["windows", "linux"], default="windows")
     args = parser.parse_args()
     train(args.platform)

@@ -10,7 +10,7 @@ from src.models.predictor import LotLPredictor
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate LotLDetector on test data")
+    parser = argparse.ArgumentParser(description="Evaluate LotlDetection on test data")
     parser.add_argument("--platform", choices=["windows", "linux"], default="windows")
     args = parser.parse_args()
     _, test = load_train_test(args.platform)

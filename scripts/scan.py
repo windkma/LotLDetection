@@ -41,7 +41,7 @@ def scan_file(predictor, path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Scan commands with LotLDetector")
+    parser = argparse.ArgumentParser(description="Scan commands with LotlDetection")
     parser.add_argument("--platform", choices=["windows", "linux"], default="windows")
     parser.add_argument("command", nargs="?", help="Command text; omit for the >>> prompt")
     parser.add_argument("--file", type=Path, metavar="PATH", help="UTF-8 TXT file containing one command per line")
@@ -58,7 +58,7 @@ def main():
     if args.command is not None:
         print_result(predictor.predict(args.command))
         return
-    print(f"LotLDetector [{args.platform}] - type exit to quit")
+    print(f"LotlDetection [{args.platform}] - type exit to quit")
     while True:
         try:
             command = input(">>> ").strip()
