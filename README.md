@@ -56,7 +56,7 @@ flowchart LR
 ### Windows Test Holdout
 
 ```text
-                                          precision    recall  f1-score   support
+              precision    recall  f1-score   support
 
 Good/Neutral     0.9918    0.9823    0.9871      1358
          Bad     0.7000    0.8358    0.7619        67
@@ -72,7 +72,7 @@ NEUTRAL=544 (including 0 BAD samples)
 ### Linux Test Holdout
 
 ```text
-                                          precision    recall  f1-score   support
+              precision    recall  f1-score   support
 
 Good/Neutral     0.9755    0.9927    0.9840       681
          Bad     0.9750    0.9198    0.9466       212
