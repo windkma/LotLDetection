@@ -1,6 +1,4 @@
 """
-pipeline.py
------------
 Feature extraction pipeline for command strings.
 
 Sequentially extracts:
@@ -18,11 +16,13 @@ Classes:
 """
 
 from src.preprocessing.normalizer import windows_analysis_views, extract_ip_labels
-from src.features.label_generators import RegexLabelGenerator, KeywordLabelGenerator
+from src.features.label_generators import RegexLabelGenerator, KeywordLabelGenerator, BinaryLabelGenerator
 from src.features.similarity import SimilarityMatcher
 from src.features.rules_constants import (
     WINDOWS_COMMANDS, WINDOWS_PATHS, WINDOWS_KEYWORDS, WINDOWS_REGEX_LIST,
     LINUX_COMMANDS, LINUX_PATHS, LINUX_KEYWORDS, LINUX_REGEX_LIST,
+    ADDED_WINDOWS_BINARIES, ADDED_LINUX_BINARIES,
+    ADDED_WINDOWS_REGEX_LIST, ADDED_LINUX_REGEX_LIST,
 )
 
 LABEL_LOOKS_LIKE_KNOWN_LOL = "LOOKS_LIKE_KNOWN_LOL"
@@ -44,6 +44,9 @@ class WindowsFeaturePipeline:
         self._cmd_gen = KeywordLabelGenerator("COMMAND", WINDOWS_COMMANDS, tokenize=True, platform="windows")
         self._kw_gen = KeywordLabelGenerator("KEYWORD", WINDOWS_KEYWORDS, tokenize=True, platform="windows")
         self._regex_gen = RegexLabelGenerator(WINDOWS_REGEX_LIST, platform="windows")
+        # PHẦN BỔ SUNG 2026-11-03: tên binary và hành vi ngoài bộ rule gốc.
+        self._bin_gen = BinaryLabelGenerator(ADDED_WINDOWS_BINARIES, "windows")
+        self._added_regex_gen = RegexLabelGenerator(ADDED_WINDOWS_REGEX_LIST, platform="windows")
         self._similarity = SimilarityMatcher(corpus_path, platform="windows")
 
     def __call__(self, command: str, training: bool = False) -> list:
@@ -64,6 +67,8 @@ class WindowsFeaturePipeline:
             labels.extend(self._cmd_gen(view))
             labels.extend(self._kw_gen(view))
             labels.extend(self._regex_gen(view))
+            labels.extend(self._bin_gen(view))
+            labels.extend(self._added_regex_gen(view))
 
             if not training and self._similarity.is_similar(view):
                 labels.append(LABEL_LOOKS_LIKE_KNOWN_LOL)
@@ -86,6 +91,9 @@ class LinuxFeaturePipeline:
         self._cmd_gen = KeywordLabelGenerator("COMMAND", LINUX_COMMANDS, tokenize=True, platform="linux")
         self._kw_gen = KeywordLabelGenerator("KEYWORD", LINUX_KEYWORDS, tokenize=True, platform="linux")
         self._regex_gen = RegexLabelGenerator(LINUX_REGEX_LIST, platform="linux")
+        # PHẦN BỔ SUNG 2026-11-03: tên binary và hành vi ngoài bộ rule gốc.
+        self._bin_gen = BinaryLabelGenerator(ADDED_LINUX_BINARIES, "linux")
+        self._added_regex_gen = RegexLabelGenerator(ADDED_LINUX_REGEX_LIST, platform="linux")
         self._similarity = SimilarityMatcher(corpus_path, platform="linux")
 
     def __call__(self, command: str, training: bool = False) -> list:
@@ -107,6 +115,8 @@ class LinuxFeaturePipeline:
         labels.extend(self._cmd_gen(command))
         labels.extend(self._kw_gen(command))
         labels.extend(self._regex_gen(command))
+        labels.extend(self._bin_gen(command))
+        labels.extend(self._added_regex_gen(command))
 
         if not training and self._similarity.is_similar(command):
             labels.append(LABEL_LOOKS_LIKE_KNOWN_LOL)

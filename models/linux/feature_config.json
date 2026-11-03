@@ -2,7 +2,7 @@
   "platform": "linux",
   "n_estimators": 100,
   "class_weight": "balanced",
-  "feature_version": "backup-merged-adobe-windows-views-v2",
+  "feature_version": "adobe-symbolic-independent-regex-v4",
   "minimum_labels": 1,
   "random_state": 42,
   "threshold": 0.6,
@@ -11,10 +11,10 @@
     "test": 0.1,
     "method": "stratified_shuffle"
   },
-  "dataset_sha256": "aa72f0aaa2d4290362747336b0e1f8b556129b517f80010486e3ac4348a59685",
-  "training_dataset_sha256": "a404b45244e1231e897982e039e0066eea2faf4e04b9e19526044d49459e7181",
-  "corpus_sha256": "bcac3e5df78ad311a1db4cceafb95e3913ca5ba5e185694ea27250067f7b3d55",
-  "total_features": 363,
-  "training_samples": 6664,
-  "skipped_bad": 81
+  "dataset_sha256": "73f16802ee5f99d7eabbb38c485bacbb82b76da1eee90b531ad3e32119d22f08",
+  "training_dataset_sha256": "5cc004b3f86cb34e1b2f8f0ad1b6ccdb5ece18c91dc6ef5d66c37d51a83a6780",
+  "corpus_sha256": "f8a51ca2b57d561476cf2af08a95b5dd667c67adb5cf1a0fc675ee73aa3e8c93",
+  "total_features": 953,
+  "training_samples": 8037,
+  "skipped_bad": 0
 }

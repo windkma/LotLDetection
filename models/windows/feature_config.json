@@ -2,7 +2,7 @@
   "platform": "windows",
   "n_estimators": 100,
   "class_weight": "balanced",
-  "feature_version": "backup-merged-adobe-windows-views-v2",
+  "feature_version": "adobe-symbolic-independent-regex-v4",
   "minimum_labels": 1,
   "random_state": 42,
   "threshold": 0.35,
@@ -11,10 +11,10 @@
     "test": 0.1,
     "method": "stratified_shuffle"
   },
-  "dataset_sha256": "426593096854b3ed937943ba4a5a38d565ef40522799e82415ac18fec81f8218",
-  "training_dataset_sha256": "6d7f564cf86696ba4034ac98a645c16a197bef35bbebb0b6cddf6d36a8cbfe7f",
-  "corpus_sha256": "d1781e6e8042e7460573ce1702a446b56c1b31b02aa6b05b09744a2721235a82",
-  "total_features": 472,
-  "training_samples": 1905,
-  "skipped_bad": 3
+  "dataset_sha256": "81600a6990cc9792eb05f9ce7581cd3ab041d8e4d02d3067c834fac05254ce0e",
+  "training_dataset_sha256": "ebcb3a0cd1c44f0e42bd57206dc933367981eae7a51612c767ab19ce0e7815df",
+  "corpus_sha256": "402071e7af529b6bec863531a713b87675e0310ffc3b7563009e1168068fd36e",
+  "total_features": 716,
+  "training_samples": 12819,
+  "skipped_bad": 0
 }

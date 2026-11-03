@@ -1,8 +1,5 @@
 """
-label_generators.py
--------------------
-Feature label generators that transform raw command strings into lists of
-symbolic security labels.
+Feature label generators that transform raw command strings into lists of symbolic security labels.
 
 Classes:
 - RegexLabelGenerator   : Generates labels from regular expressions with named capturing groups.
@@ -13,18 +10,47 @@ import re
 from src.preprocessing.tokenizer import split_windows, split_linux
 
 
+# PHẦN BỔ SUNG 2026-11-03: nhận diện tên binary, kể cả trong đường dẫn.
+# Đây là đặc trưng hiện diện tên công cụ, không phải nhãn kết luận tấn công.
+class BinaryLabelGenerator:
+    """Recognize catalog tool names without changing the original command.
+
+    Matches are lexical evidence, not proof that a tool was executed. Windows
+    executable extensions are optional; Linux names remain case-sensitive.
+    Word boundaries exclude longer filenames such as notcurl or curl-backup.
+    """
+
+    def __init__(self, binaries, platform):
+        self._windows = platform == "windows"
+        names = set()
+        for binary in binaries:
+            name = str(binary).replace("\\", "/").rsplit("/", 1)[-1]
+            if self._windows:
+                name = name.lower()
+                name = re.sub(r"\.(?:exe|com|bat|cmd)$", "", name)
+            if name:
+                names.add(name)
+        alternatives = "|".join(re.escape(name) for name in sorted(names, key=lambda n: (-len(n), n)))
+        suffix = r"(?:\.(?:exe|com|bat|cmd))?" if self._windows else ""
+        self._pattern = re.compile(
+            rf"(?<![\w.+-])(?P<binary>{alternatives}){suffix}(?![\w.+-])",
+            re.IGNORECASE if self._windows else 0,
+        )
+
+    def __call__(self, command):
+        return list(dict.fromkeys(
+            "BIN_" + match.group("binary").upper()
+            for match in self._pattern.finditer(str(command))
+        ))
+
+
 class RegexLabelGenerator:
-    """
-    Generates labels by matching command strings against regular expressions.
-
-    Each regex pattern contains named capturing groups (?P<name>...).
-    When a group matches, its name is added to the extracted label set.
-    """
-
     def __init__(self, regex_patterns: list, platform: str = "linux"):
         """
         Args:
-            regex_patterns: List of regex strings with named capturing groups.
+            regex_patterns: Independent regex rules with named capturing groups.
+                Keep each feature rule separate: joining rules with | can hide
+                overlapping matches. Each matching group name becomes a label.
         """
         flags = re.MULTILINE | (re.IGNORECASE if platform == "windows" else 0)
         self._compiled_patterns = [
@@ -33,15 +59,6 @@ class RegexLabelGenerator:
         ]
 
     def __call__(self, command: str) -> list:
-        """
-        Matches command string and returns list of matched group names.
-
-        Args:
-            command: Input command string.
-
-        Returns:
-            List of matched label strings.
-        """
         padded = f"  {command} "
         matched_labels = []
 
@@ -55,14 +72,6 @@ class RegexLabelGenerator:
 
 
 class KeywordLabelGenerator:
-    """
-    Generates labels based on presence of keywords or paths in the command.
-
-    Modes:
-    - tokenize=True : Tokenizes command and matches exact tokens (case-insensitive).
-    - tokenize=False: Substring matching against the raw command string (e.g. paths).
-    """
-
     def __init__(self, prefix: str, keywords: list, tokenize: bool, platform: str = "linux"):
         """
         Args:
