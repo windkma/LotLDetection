@@ -81,10 +81,16 @@ class KeywordLabelGenerator:
             platform: Platform name ("windows" or "linux").
         """
         self._prefix = prefix
-        self._keywords_lower: set = {k.lower() for k in keywords}
         self._tokenize = tokenize
         self._platform = platform
         self._tokenizer = split_windows if platform == "windows" else split_linux
+
+        if self._platform == "windows" and self._prefix == "COMMAND":
+            self._keywords_lower: set = {
+                re.sub(r"\.(?:exe|com|bat|cmd)$", "", k.lower()) for k in keywords
+            }
+        else:
+            self._keywords_lower: set = {k.lower() for k in keywords}
 
     def __call__(self, command: str) -> list:
         """
@@ -107,9 +113,15 @@ class KeywordLabelGenerator:
 
             for token in tokens:
                 token_lower = token.lower()
-                if token_lower in self._keywords_lower:
-                    label = f"{self._prefix}_{token_lower}".upper()
-                    found_labels[label] = True
+                if self._platform == "windows" and self._prefix == "COMMAND":
+                    clean_token = re.sub(r"\.(?:exe|com|bat|cmd)$", "", token_lower)
+                    if clean_token in self._keywords_lower:
+                        label = f"{self._prefix}_{clean_token}".upper()
+                        found_labels[label] = True
+                else:
+                    if token_lower in self._keywords_lower:
+                        label = f"{self._prefix}_{token_lower}".upper()
+                        found_labels[label] = True
         else:
             command_lower = command.lower()
             for keyword in self._keywords_lower:

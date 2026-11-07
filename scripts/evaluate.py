@@ -12,11 +12,13 @@ from src.models.predictor import LotLPredictor
 def main():
     parser = argparse.ArgumentParser(description="Evaluate LotlDetection on test data")
     parser.add_argument("--platform", choices=["windows", "linux"], default="windows")
+    parser.add_argument("--split", choices=["train", "test"], default="test")
     args = parser.parse_args()
-    _, test = load_train_test(args.platform)
+    train_df, test_df = load_train_test(args.platform)
+    dataset = train_df if args.split == "train" else test_df
     predictor = LotLPredictor(args.platform)
-    print(f"Test [{args.platform}]: {len(test)} samples")
-    report(test["label"], predictor.predict_batch(test["commands"]))
+    print(f"{args.split.capitalize()} [{args.platform}]: {len(dataset)} samples")
+    report(dataset["label"], predictor.predict_batch(dataset["commands"]))
 
 
 if __name__ == "__main__":

