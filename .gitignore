@@ -8,9 +8,8 @@ data/source_manifest.json
 COMMANDS_TAXONOMY.md
 COMMANDS_BY_TOOL.md
 scripts/export_grouped_commands.py
-data/windows_commands_grouped.csv
-data/backup_pre_placeholder_fix
-scratch_pdf
 scripts/rebalance_placeholders.py
-data/linux_commands_grouped.csv
 data/windows_commands_grouped.csv
+data/linux_commands_grouped.csv
+data/backup_pre_placeholder_fix/
+scratch_pdf/

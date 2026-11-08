@@ -60,6 +60,8 @@ def train(platform="windows"):
         "dataset_sha256": hashlib.sha256(files["dataset"].read_bytes()).hexdigest(),
         "training_dataset_sha256": hashlib.sha256(files["training_dataset"].read_bytes()).hexdigest(),
         "corpus_sha256": hashlib.sha256(files["corpus"].read_bytes()).hexdigest(),
+        "classifier_sha256": hashlib.sha256((files["models"] / "rf_classifier.joblib").read_bytes()).hexdigest(),
+        "vectorizer_sha256": hashlib.sha256((files["models"] / "vectorizer.joblib").read_bytes()).hexdigest(),
         "total_features": len(vectorizer.vocabulary_), "training_samples": len(targets), "skipped_bad": skipped,
     }
     (files["models"] / "feature_config.json").write_text(

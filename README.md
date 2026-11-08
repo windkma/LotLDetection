@@ -155,6 +155,30 @@ python scripts/evaluate.py --platform linux
 
 ---
 
+## Artifact integrity and corpus validation
+
+Training writes `classifier_sha256`, `vectorizer_sha256`, and `corpus_sha256`
+into each platform's `feature_config.json`. Before deserialization, the predictor
+validates both artifact hashes and loads the exact verified byte snapshots.
+Missing/invalid hashes, missing files, and mismatched content fail closed with
+`ValueError("Model artifact integrity check failed: ...")`. Models created before
+these checks must be retrained.
+
+The metadata is a trust anchor: protect it together with the application code.
+An attacker who can replace both artifacts and their expected hashes can bypass
+plain SHA-256 checks; this is integrity validation against trusted metadata, not
+artifact authentication by a signature.
+
+The vectorizer currently used by training is `CountVectorizer` over symbolic
+labels. The integrity check also applies if a future model uses TF-IDF.
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+See [corpus notes](data/external/README.md) for coverage, constraints, sources,
+and the corpus update workflow.
+
 ## Project Structure
 
 ```text
@@ -167,8 +191,8 @@ LotlDetection/
 │   │   ├── windows.csv             # 3,941 curated Windows LotL samples (3,218 Good, 723 Bad)
 │   │   └── linux.csv               # 8,969 curated Linux LotL samples (6,382 Good, 2,587 Bad)
 │   ├── external/
-│   │   ├── cmd_known.corpus        # 60 Windows reference commands
-│   │   └── bash_known.corpus       # 33 Linux reference commands
+│   │   ├── cmd_known.corpus        # 167 Windows reference commands
+│   │   └── bash_known.corpus       # 137 Linux reference commands
 │   └── features/
 │       ├── windows/train.csv       # Windows feature matrix (3,546 rows x 537 features)
 │       └── linux/train.csv         # Linux feature matrix (7,989 rows x 816 features)

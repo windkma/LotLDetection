@@ -13,7 +13,9 @@
   },
   "dataset_sha256": "d82b62085838fa89be74b280e9e56fa67ae797c3099e0182f56f1e37127be088",
   "training_dataset_sha256": "21b77a354111971b275af5b2895e81356d5dc45bd122fa14a7dbd64f4d282e09",
-  "corpus_sha256": "402071e7af529b6bec863531a713b87675e0310ffc3b7563009e1168068fd36e",
+  "corpus_sha256": "47c62cb79e8083be021318db22263b9ff0b1f398eb798cccffd82b21793fc83c",
+  "classifier_sha256": "6446cfed2c92c61dc3c9d094689ad93dfa642d0e3a9bd26f778407e775b4e981",
+  "vectorizer_sha256": "e1c749c88cac2bfb1d257174b183dd9bcd640f15a9ce2cdebd0fc3b84370c718",
   "total_features": 537,
   "training_samples": 3546,
   "skipped_bad": 0

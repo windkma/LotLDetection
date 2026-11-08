@@ -2,8 +2,10 @@
 import joblib
 import hashlib
 import json
+from io import BytesIO
 
 from src.config import FEATURE_VERSION, paths
+from src.models.integrity import verified_artifact_bytes
 from src.preprocessing.normalizer import windows_analysis_views
 from src.features.pipeline import (
     LABEL_LOOKS_LIKE_KNOWN_LOL, MIN_LABELS_FOR_TRAINING,
@@ -33,11 +35,19 @@ class LotLPredictor:
             raise ValueError("Feature rules changed. Run scripts/train.py before scanning.")
         if hashlib.sha256(paths(platform)["corpus"].read_bytes()).hexdigest() != metadata["corpus_sha256"]:
             raise ValueError("BLEU corpus changed. Retrain before scanning.")
+        # Verify BOTH files before any deserialization; load the verified snapshots
+        # so replacing a file after validation cannot bypass the checks.
+        classifier_bytes = verified_artifact_bytes(
+            model_dir / "rf_classifier.joblib", metadata.get("classifier_sha256"),
+        )
+        vectorizer_bytes = verified_artifact_bytes(
+            model_dir / "vectorizer.joblib", metadata.get("vectorizer_sha256"),
+        )
         self.platform = platform
         self.threshold = metadata["threshold"]
-        self._classifier = joblib.load(model_dir / "rf_classifier.joblib")
+        self._classifier = joblib.load(BytesIO(classifier_bytes))
         self._classifier.verbose = 0
-        self._vectorizer = joblib.load(model_dir / "vectorizer.joblib")
+        self._vectorizer = joblib.load(BytesIO(vectorizer_bytes))
         self._bad_index = list(self._classifier.classes_).index(1)
         self._pipeline = make_pipeline(platform)
 

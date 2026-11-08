@@ -45,8 +45,10 @@ class SimilarityMatcher:
                 if not (MIN_CORPUS_LEN <= len(line) <= MAX_CORPUS_LEN):
                     continue
                 try:
-                    tokens = self._tokenizer(line)
-                    if tokens:
+                    # Use the same normalization as the candidate, including IPs,
+                    # ports, version numbers and executable names such as regsvr32.
+                    tokens = self._tokenizer(_RE_DIGITS.sub("0", line))
+                    if len(tokens) >= MIN_TOKENS:
                         corpus.append(tokens)
                 except Exception:
                     continue
