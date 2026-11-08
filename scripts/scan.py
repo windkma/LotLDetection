@@ -58,15 +58,33 @@ def main():
     if args.command is not None:
         print_result(predictor.predict(args.command))
         return
-    print(f"LotlDetection [{args.platform}] - type exit to quit")
+    print(f"LotlDetection [{args.platform}] - type exit to quit (multiline quotes supported)")
     while True:
         try:
-            command = input(">>> ").strip()
+            line = input(">>> ")
         except (EOFError, KeyboardInterrupt):
             print()
             break
-        if command.lower() in {"exit", "quit"}:
+        if line.strip().lower() in {"exit", "quit"}:
             break
+
+        # Accumulate multiline input if quotes are unclosed
+        accumulated = [line]
+        while True:
+            text_so_far = "\n".join(accumulated)
+            # Count single and double quotes not escaped
+            single_quotes = text_so_far.count("'")
+            double_quotes = text_so_far.count('"')
+            if single_quotes % 2 == 0 and double_quotes % 2 == 0:
+                break
+            try:
+                continuation = input("... ")
+                accumulated.append(continuation)
+            except (EOFError, KeyboardInterrupt):
+                print()
+                break
+
+        command = "\n".join(accumulated).strip()
         if command:
             print_result(predictor.predict(command))
 

@@ -3,8 +3,8 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SEED = 42
-# PHẦN BỔ SUNG 2026-11-03: bắt buộc train lại khi thay tập đặc trưng.
-FEATURE_VERSION = "lotldetection-symbolic-independent-regex-v8"
+# PHẦN BỔ SUNG 2026-11-08: chuẩn hóa toàn bộ nhãn, gộp ADDED_* và BIN_* thành COMMAND_* và regex ngữ nghĩa.
+FEATURE_VERSION = "lotldetection-symbolic-unified-v13"
 N_ESTIMATORS = 100
 THRESHOLDS = {"windows": 0.35, "linux": 0.60}
 

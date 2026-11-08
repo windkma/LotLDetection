@@ -87,3 +87,63 @@ def split_linux(command: str) -> list:
         current = expanded
 
     return current
+
+
+def extract_executable_tokens(command: str, platform: str = "windows") -> list:
+    """Extract only tokens that occupy an execution position in the command line.
+
+    Recognizes:
+    - Initial command position.
+    - Executables following chaining operators (&, &&, |, ||, ;, newline).
+    - Executables following shell wrappers (cmd /c, powershell -c, sudo, nohup, etc.).
+    - Executables spawned via execution verbs (create, start, runas).
+    """
+    if platform == "windows":
+        raw_tokens = split_windows(command)
+        delimiters = {'&', '&&', '|', '||', ';'}
+        shell_binaries = {'cmd', 'cmd.exe', 'powershell', 'powershell.exe', 'pwsh', 'pwsh.exe', 'wsl', 'wsl.exe', 'bash', 'bash.exe'}
+        wrapper_flags = {'/c', '/k', '-c', '-command', '-encodedcommand', '-enc', '/tr', '/run'}
+        wrapper_commands = {'sudo', 'runas', 'create', 'start'}
+    else:
+        raw_tokens = split_linux(command)
+        delimiters = {';', '&', '&&', '|', '||', '\n'}
+        shell_binaries = {'sh', 'bash', 'dash', 'zsh', 'ksh'}
+        wrapper_flags = {'-exec', '-ok'}
+        wrapper_commands = {'sudo', 'doas', 'su', 'nohup', 'nice', 'xargs', 'eval', 'exec', 'chroot'}
+
+    exec_tokens = []
+    next_is_exec = True
+    last_exec_bin = ''
+
+    for i, tok in enumerate(raw_tokens):
+        clean = tok.strip('"\' \t')
+        if not clean:
+            continue
+
+        if next_is_exec:
+            if platform == "windows" and clean.lower() == 'set' and i + 1 < len(raw_tokens) and '=' in raw_tokens[i + 1]:
+                next_is_exec = False
+                continue
+            base_name = clean.replace('\\', '/').rsplit('/', 1)[-1]
+            exec_tokens.append(base_name)
+            last_exec_bin = base_name.lower().split('.')[0]
+            next_is_exec = (clean.lower() in wrapper_commands or base_name.lower() in wrapper_commands)
+            continue
+
+        if clean in delimiters:
+            next_is_exec = True
+            continue
+
+        if clean.lower() in wrapper_flags:
+            next_is_exec = True
+            continue
+
+        if last_exec_bin in shell_binaries and clean.lower() in {'-c', '/c', '/k', '-command'}:
+            next_is_exec = True
+            continue
+
+        if clean.lower() in wrapper_commands:
+            next_is_exec = True
+            continue
+
+    return exec_tokens

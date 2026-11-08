@@ -59,7 +59,7 @@ flowchart LR
    - **Statistical track:** Transforms labels via `CountVectorizer` and computes malicious posterior probability using a 100-tree balanced Random Forest.
    - **Lexical track:** Computes runtime Sentence-BLEU similarity against historical attack corpora.
 4. **Decision Logic:** Emits an actionable verdict based on platform-calibrated risk thresholds:
-   - Returns **BAD** if a Sentence-BLEU match is detected or Random Forest probability meets/exceeds the decision threshold (0.575 for Windows, 0.50 for Linux).
+   - Returns **BAD** if a Sentence-BLEU match is detected or Random Forest probability meets/exceeds the decision threshold (0.35 for Windows, 0.60 for Linux).
    - Returns **NEUTRAL** if fewer than 1 feature label is detected (insufficient observable telemetry).
    - Returns **GOOD** if sufficient feature labels are present and the probability falls below threshold.
 
@@ -70,35 +70,35 @@ flowchart LR
 ### Windows Test
 
 ```text
-Test [windows]: 840 samples
+Test [windows]: 395 samples
               precision    recall  f1-score   support
 
-Good/Neutral     0.9778    0.9740    0.9759       768
-         Bad     0.7333    0.7639    0.7483        72
+Good/Neutral     0.9623    0.9474    0.9548       323
+         Bad     0.7792    0.8333    0.8054        72
 
-    accuracy                         0.9560       840
-   macro avg     0.8556    0.8689    0.8621       840
-weighted avg     0.9568    0.9560    0.9564       840
+    accuracy                         0.9266       395
+   macro avg     0.8707    0.8904    0.8801       395
+weighted avg     0.9289    0.9266    0.9275       395
 
-TN=748 FP=20 FN=17 TP=55
-NEUTRAL=0 (including 0 BAD samples)
+TN=306 FP=17 FN=12 TP=60
+NEUTRAL=6 (including 0 BAD samples)
 ```
 
 ### Linux Test
 
 ```text
-Test [linux]: 921 samples
+Test [linux]: 897 samples
               precision    recall  f1-score   support
 
-Good/Neutral     0.9715    0.9789    0.9752       662
-         Bad     0.9449    0.9266    0.9357       259
+Good/Neutral     0.9425    0.9765    0.9592       638
+         Bad     0.9364    0.8533    0.8929       259
 
-    accuracy                         0.9642       921
-   macro avg     0.9582    0.9527    0.9554       921
-weighted avg     0.9640    0.9642    0.9641       921
+    accuracy                         0.9409       897
+   macro avg     0.9395    0.9149    0.9261       897
+weighted avg     0.9408    0.9409    0.9401       897
 
-TN=648 FP=14 FN=19 TP=240
-NEUTRAL=0 (including 0 BAD samples)
+TN=623 FP=15 FN=38 TP=221
+NEUTRAL=13 (including 5 BAD samples)
 ```
 
 ---
@@ -164,14 +164,14 @@ LotlDetection/
 │
 ├── data/
 │   ├── raw/
-│   │   ├── windows.csv             # 8,308 curated Windows LotL samples
-│   │   └── linux.csv               # 8,709 curated Linux LotL samples
+│   │   ├── windows.csv             # 3,941 curated Windows LotL samples (3,218 Good, 723 Bad)
+│   │   └── linux.csv               # 8,969 curated Linux LotL samples (6,382 Good, 2,587 Bad)
 │   ├── external/
 │   │   ├── cmd_known.corpus        # 60 Windows reference commands
 │   │   └── bash_known.corpus       # 33 Linux reference commands
 │   └── features/
-│       ├── windows/train.csv       # Windows feature matrix (7,477 rows x 701 features)
-│       └── linux/train.csv         # Linux feature matrix (7,838 rows x 956 features)
+│       ├── windows/train.csv       # Windows feature matrix (3,546 rows x 537 features)
+│       └── linux/train.csv         # Linux feature matrix (7,989 rows x 816 features)
 │
 ├── models/
 │   ├── windows/

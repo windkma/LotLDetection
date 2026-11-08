@@ -7,41 +7,7 @@ Classes:
 """
 
 import re
-from src.preprocessing.tokenizer import split_windows, split_linux
-
-
-# PHẦN BỔ SUNG 2026-11-03: nhận diện tên binary, kể cả trong đường dẫn.
-# Đây là đặc trưng hiện diện tên công cụ, không phải nhãn kết luận tấn công.
-class BinaryLabelGenerator:
-    """Recognize catalog tool names without changing the original command.
-
-    Matches are lexical evidence, not proof that a tool was executed. Windows
-    executable extensions are optional; Linux names remain case-sensitive.
-    Word boundaries exclude longer filenames such as notcurl or curl-backup.
-    """
-
-    def __init__(self, binaries, platform):
-        self._windows = platform == "windows"
-        names = set()
-        for binary in binaries:
-            name = str(binary).replace("\\", "/").rsplit("/", 1)[-1]
-            if self._windows:
-                name = name.lower()
-                name = re.sub(r"\.(?:exe|com|bat|cmd)$", "", name)
-            if name:
-                names.add(name)
-        alternatives = "|".join(re.escape(name) for name in sorted(names, key=lambda n: (-len(n), n)))
-        suffix = r"(?:\.(?:exe|com|bat|cmd))?" if self._windows else ""
-        self._pattern = re.compile(
-            rf"(?<![\w.+-])(?P<binary>{alternatives}){suffix}(?![\w.+-])",
-            re.IGNORECASE if self._windows else 0,
-        )
-
-    def __call__(self, command):
-        return list(dict.fromkeys(
-            "BIN_" + match.group("binary").upper()
-            for match in self._pattern.finditer(str(command))
-        ))
+from src.preprocessing.tokenizer import split_windows, split_linux, extract_executable_tokens
 
 
 class RegexLabelGenerator:
@@ -107,7 +73,10 @@ class KeywordLabelGenerator:
 
         if self._tokenize:
             try:
-                tokens = self._tokenizer(command)
+                if self._prefix == "COMMAND":
+                    tokens = extract_executable_tokens(command, self._platform)
+                else:
+                    tokens = self._tokenizer(command)
             except Exception:
                 tokens = []
 
