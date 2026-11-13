@@ -2,7 +2,7 @@
   "platform": "linux",
   "n_estimators": 100,
   "class_weight": "balanced",
-  "feature_version": "lotldetection-symbolic-unified-v13",
+  "feature_version": "lotldetection-symbolic-unified-v14-localhost",
   "minimum_labels": 1,
   "random_state": 42,
   "threshold": 0.6,
@@ -12,10 +12,10 @@
     "method": "stratified_shuffle"
   },
   "dataset_sha256": "3af866ba44bf2df3e6c4b9e9af3714209db4e5783f7ec332641f9c239e4870d7",
-  "training_dataset_sha256": "ef443704b19e4d56f472b718b8e4e6648a40df76df1a1c226cc5c48d49e63302",
+  "training_dataset_sha256": "2e33f99ad16988a8296690cbd5b50c4db12d63ef5968d4b0097195b5b88f5a42",
   "corpus_sha256": "1e2cd870585db41425c7bb44e100e57635322905f73a880db9514ad5b69e55cb",
-  "classifier_sha256": "9c1b314b1183fea11772c7d872848a89ec56dcd707e112da7af14d5f7d8c7167",
-  "vectorizer_sha256": "905fa74a76ab8bcc37202c16348a03f100460073c725ae5addfb49745fa24b4b",
+  "classifier_sha256": "5a3e25dd7b8a8e3f0c9edef47ecdee81ac71c555c4d3a355baf1c41afb3264b8",
+  "vectorizer_sha256": "26ecc02f543c3d89a70d8292e701340cdbc73fcd015d99e45f3ed6ad68330d5b",
   "total_features": 816,
   "training_samples": 7989,
   "skipped_bad": 83

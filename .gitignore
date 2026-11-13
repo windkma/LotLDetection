@@ -13,3 +13,12 @@ data/windows_commands_grouped.csv
 data/linux_commands_grouped.csv
 data/backup_pre_placeholder_fix/
 scratch_pdf/
+
+# Curation and dataset backups
+data/backup_*/
+data/curation/
+scripts/*curation*.py
+scripts/curate_dataset.py
+src/dataset_curation.py
+tests/test_dataset_curation.py
+

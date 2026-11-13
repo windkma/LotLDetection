@@ -70,18 +70,18 @@ flowchart LR
 ### Windows Test
 
 ```text
-Test [windows]: 395 samples
+Test [windows]: 390 samples
               precision    recall  f1-score   support
 
-Good/Neutral     0.9623    0.9474    0.9548       323
-         Bad     0.7792    0.8333    0.8054        72
+Good/Neutral     0.9928    0.9858    0.9893       281
+         Bad     0.9640    0.9817    0.9727       109
 
-    accuracy                         0.9266       395
-   macro avg     0.8707    0.8904    0.8801       395
-weighted avg     0.9289    0.9266    0.9275       395
+    accuracy                         0.9846       390
+   macro avg     0.9784    0.9837    0.9810       390
+weighted avg     0.9848    0.9846    0.9847       390
 
-TN=306 FP=17 FN=12 TP=60
-NEUTRAL=6 (including 0 BAD samples)
+TN=277 FP=4 FN=2 TP=107
+NEUTRAL=8 (including 0 BAD samples)
 ```
 
 ### Linux Test

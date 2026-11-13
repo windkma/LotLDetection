@@ -4,7 +4,7 @@ import hashlib
 import json
 from io import BytesIO
 
-from src.config import FEATURE_VERSION, paths
+from src.config import feature_version, paths
 from src.models.integrity import verified_artifact_bytes
 from src.preprocessing.normalizer import windows_analysis_views
 from src.features.pipeline import (
@@ -31,8 +31,8 @@ class LotLPredictor:
     def __init__(self, platform="windows"):
         model_dir = paths(platform)["models"]
         metadata = json.loads((model_dir / "feature_config.json").read_text(encoding="utf-8"))
-        if metadata.get("feature_version") != FEATURE_VERSION:
-            raise ValueError("Feature rules changed. Run scripts/train.py before scanning.")
+        if metadata.get("feature_version") != feature_version(platform):
+            raise ValueError(f"Feature rules changed. Run python scripts/train.py --platform {platform} before scanning.")
         if hashlib.sha256(paths(platform)["corpus"].read_bytes()).hexdigest() != metadata["corpus_sha256"]:
             raise ValueError("BLEU corpus changed. Retrain before scanning.")
         # Verify BOTH files before any deserialization; load the verified snapshots

@@ -2,7 +2,7 @@
   "platform": "windows",
   "n_estimators": 100,
   "class_weight": "balanced",
-  "feature_version": "lotldetection-symbolic-unified-v13",
+  "feature_version": "lotldetection-symbolic-unified-v23-localhost",
   "minimum_labels": 1,
   "random_state": 42,
   "threshold": 0.35,
@@ -11,12 +11,12 @@
     "test": 0.1,
     "method": "stratified_shuffle"
   },
-  "dataset_sha256": "d82b62085838fa89be74b280e9e56fa67ae797c3099e0182f56f1e37127be088",
-  "training_dataset_sha256": "21b77a354111971b275af5b2895e81356d5dc45bd122fa14a7dbd64f4d282e09",
+  "dataset_sha256": "eee8b6eef1aa446deee1cd52098f1bdb926f73f9288f7b2b2de2a684d3fea6fb",
+  "training_dataset_sha256": "7fb3c7cc0713caf0e1f48850e44722e53fa960475dcea8c1a17fd1dfd9978cfc",
   "corpus_sha256": "47c62cb79e8083be021318db22263b9ff0b1f398eb798cccffd82b21793fc83c",
-  "classifier_sha256": "6446cfed2c92c61dc3c9d094689ad93dfa642d0e3a9bd26f778407e775b4e981",
-  "vectorizer_sha256": "e1c749c88cac2bfb1d257174b183dd9bcd640f15a9ce2cdebd0fc3b84370c718",
-  "total_features": 537,
-  "training_samples": 3546,
+  "classifier_sha256": "fdf6c609fdceef809642f21f75f51c8f6acb6a848736b5f8168b9fc4a6ef2f4f",
+  "vectorizer_sha256": "7c6cc5b05730488366d668bf0dedd085dc71a8e12e5d7a0536341bd1dbb75f59",
+  "total_features": 399,
+  "training_samples": 3501,
   "skipped_bad": 0
 }

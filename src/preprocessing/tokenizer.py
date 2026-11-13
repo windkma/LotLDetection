@@ -114,6 +114,7 @@ def extract_executable_tokens(command: str, platform: str = "windows") -> list:
     exec_tokens = []
     next_is_exec = True
     last_exec_bin = ''
+    wsh_script_pending = False
 
     for i, tok in enumerate(raw_tokens):
         clean = tok.strip('"\' \t')
@@ -127,12 +128,25 @@ def extract_executable_tokens(command: str, platform: str = "windows") -> list:
             base_name = clean.replace('\\', '/').rsplit('/', 1)[-1]
             exec_tokens.append(base_name)
             last_exec_bin = base_name.lower().split('.')[0]
+            wsh_script_pending = platform == 'windows' and base_name.lower() in {'cscript', 'cscript.exe', 'wscript', 'wscript.exe'}
             next_is_exec = (clean.lower() in wrapper_commands or base_name.lower() in wrapper_commands)
             continue
 
         if clean in delimiters:
             next_is_exec = True
+            wsh_script_pending = False
             continue
+
+        # WSH executes its first non-option script argument. PubPrn invoked via
+        # cscript is the same component as a direct pubprn.vbs invocation.
+        # Do not treat later data arguments, or a fake *.exe script, as binaries.
+        if wsh_script_pending:
+            if clean.startswith('//'):
+                continue
+            script_name = clean.replace('\\', '/').rsplit('/', 1)[-1]
+            if script_name.lower().endswith(('.vbs', '.vbe', '.js', '.jse', '.wsf', '.wsh')):
+                exec_tokens.append(script_name)
+            wsh_script_pending = False
 
         if clean.lower() in wrapper_flags:
             next_is_exec = True

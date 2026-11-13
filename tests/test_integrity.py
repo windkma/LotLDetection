@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from src.config import FEATURE_VERSION, paths
+from src.config import feature_version, paths
 from src.models.predictor import LotLPredictor
 
 
@@ -23,7 +23,7 @@ class ArtifactIntegrityTests(unittest.TestCase):
             "vectorizer_sha256": ("vectorizer.joblib", b"vectorizer snapshot"),
         }
         self.metadata = {
-            "feature_version": FEATURE_VERSION,
+            "feature_version": feature_version("windows"),
             "threshold": 0.5,
             "corpus_sha256": hashlib.sha256(self.corpus.read_bytes()).hexdigest(),
         }
@@ -43,6 +43,8 @@ class ArtifactIntegrityTests(unittest.TestCase):
         (self.root / "feature_config.json").write_text(json.dumps(self.metadata), encoding="utf-8")
 
     def assert_rejected_before_load(self, platform):
+        self.metadata['feature_version'] = feature_version(platform)
+        self.write_metadata()
         with self.assertRaisesRegex(ValueError, "Model artifact integrity check failed"):
             LotLPredictor(platform)
         self.load.assert_not_called()
@@ -99,6 +101,13 @@ class ArtifactIntegrityTests(unittest.TestCase):
             LotLPredictor()
         self.load.assert_not_called()
 
+    def test_stale_feature_version_is_rejected_before_loading(self):
+        self.metadata['feature_version'] = 'obsolete-feature-rules'
+        self.write_metadata()
+        with self.assertRaisesRegex(ValueError, 'Feature rules changed'):
+            LotLPredictor('windows')
+        self.load.assert_not_called()
+
 
 class ShippedModelTests(unittest.TestCase):
     def test_real_artifact_hashes_and_predictions(self):
@@ -113,7 +122,12 @@ class ShippedModelTests(unittest.TestCase):
                                   ("vectorizer_sha256", "vectorizer.joblib")):
                     self.assertEqual(config[key], hashlib.sha256((files["models"] / name).read_bytes()).hexdigest())
                 self.assertEqual(config["corpus_sha256"], hashlib.sha256(files["corpus"].read_bytes()).hexdigest())
-                self.assertEqual(LotLPredictor(platform).predict(command)["verdict"], "BAD")
+                if config['feature_version'] != feature_version(platform):
+                    # A dataset/rule edit must not silently use an old vectorizer.
+                    with self.assertRaisesRegex(ValueError, 'Feature rules changed'):
+                        LotLPredictor(platform)
+                else:
+                    self.assertEqual(LotLPredictor(platform).predict(command)["verdict"], "BAD")
 
 
 if __name__ == "__main__":

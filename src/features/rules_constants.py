@@ -1400,18 +1400,10 @@ WINDOWS_COMMANDS = [
 ]
 
 WINDOWS_PATHS = [
-    'C:\\Windows\\Microsoft.NET\\Framework64',
     'C:\\Windows\\Temp',
-    'C:\\Windows\\System32',
-    'C:\\Windows\\SysWOW64',
-    'C:\\Windows\\System32\\svchost.exe',
-    'C:\\Windows\\System32\\WScript.exe',
-    'C:\\Windows\\System32\\cmd.exe',
-    'C:\\Windows\\System32\\Rundll32.exe',
-    'C:\\Windows\\System32\\mshta.exe',
-    'C:\\Windows\\System32\\WindowsPowerShell',
-    'C:\\ProgramData\\Microsoft',
     'C:\\Users\\Public',
+    'C:\\ProgramData',
+    'AppData\\Local\\Temp', 
     'ADMIN$',
     'C$',
     'IPC$',
@@ -1677,9 +1669,6 @@ WINDOWS_REGEX_LIST = [
     r'(?P<winrs_remote>winrs.*\-r)',
     r'(?P<winrs_user>winrs.*\-u)',
     r'(?P<winrs_password>winrs.*\-p)',
-    r'(?P<sc_start>sc.*start)',
-    r'(?P<sc_start_remote>sc.*\\.*start)',
-    r'(?P<sc_remote>sc.*\\)',
     r'(?P<ipconfig>ipconfig)',
     r'(?P<powershell_ConPtyShell>ConPtyShell)',
     r'(?P<lua_socket>lua.*socket)',
@@ -1890,8 +1879,6 @@ WINDOWS_REGEX_LIST = [
     r'(?P<schtasks_schedule>schtasks.*/sc)',
     r'(?P<schtasks_create>schtasks.*/create)',
     r'(?P<schtasks_run>schtasks.*/run)',
-    r'(?P<sc_start_remote>sc.*\\\\.*start)',
-    r'(?P<sc_remote>sc.*\\\\)',
     r'(?P<msbuild_remote>MSBuild.*\\\\)',
     r'(?P<msbuild_remote_lc>msbuild.*\\\\)',
     r'(?P<diantz_remote>diantz.*\\\\)',
@@ -1942,4 +1929,278 @@ WINDOWS_REGEX_LIST = [
     r'(?P<redirection>\s(?:>>?|<)\s)',
     r'(?P<certutil_verifyctl>certutil.*verifyctl)',
 ]
+
+# BỔ SUNG 2026-11-09: phân biệt hành vi thay vì dựa vào tên file/payload.
+# Các nhãn dưới đây là FEATURE, không phải quy tắc tự kết luận GOOD/BAD.
+# Prefix chỉ nhận chương trình ở đầu lệnh hoặc sau toán tử CMD. Các view của
+# normalizer đã mở lớp cmd /c; không khớp tên công cụ nằm trong `echo "..."`.
+def _windows_behavior_rule(name, program, arguments):
+    executable = (
+        rf'(?:"(?:[^"\r\n]*[\\/])?(?:{program})(?:\.exe)?"'
+        rf'|(?:[^\s"\r\n]*[\\/])?(?:{program})(?:\.exe)?)'
+    )
+    # Chỉ dùng toán tử ngoài chuỗi double quote làm ranh giới CMD. Ví dụ
+    # echo "text & wevtutil cl Security" là dữ liệu, không phải lệnh xóa log.
+    prefix = r'^(?:(?:"[^"\r\n]*"|[^"\r\n])*[&|])?\s*'
+    return rf'(?P<{name}>{prefix}{executable}(?=\s|$)\s+{arguments})'
+
+
+# Nhóm A — ADS. Bắt colon thứ hai của đường dẫn Windows/UNC, không bắt cổng URL.
+_WINDOWS_ADS_ARGUMENT = (
+    r'(?:(?:[A-Za-z]:[\\/]|\\\\[^\\\s"\r\n]+\\|%[A-Za-z][\w()]*%\\)'
+    r'[^"\r\n<>|&]*:[A-Za-z_][\w.-]*'
+    r'|(?<![\w./\\:])[\w.-]+\.(?:exe|dll|txt|vbs|js|hta|cab|reg|ini|zip|bin):[A-Za-z_][\w.-]*)'
+)
+
+# BỔ SUNG 2026-11-10: vị trí cần điều tra khi đăng ký Netsh helper.
+# Temp/PerfLogs tham khảo Sigma; toàn bộ profile và biến môi trường là heuristic
+# mở rộng của dự án. Đây không phải kiểm tra ACL/chữ ký hoặc nội dung DLL.
+_WINDOWS_NETSH_RISKY_DIRECTORY = (
+    r'(?:[A-Za-z]:[\\/](?:(?:Windows[\\/])?Temp|PerfLogs|Users)[\\/]'
+    r'|%(?:TEMP|TMP|APPDATA|LOCALAPPDATA|USERPROFILE)%[\\/]'
+    r'|%(?:WINDIR|SYSTEMROOT)%[\\/]Temp[\\/])'
+)
+
+# Nhận lời gọi ở đầu script hoặc sau dấu kết thúc câu lệnh PowerShell.
+# Bỏ qua chuỗi literal để tên hàm trong Write-Output không thành feature gọi hàm.
+# windows_analysis_views mở -Command/-EncodedCommand trước khi các rule này chạy.
+def _powershell_statement_rule(name, invocation):
+    prefix = r'''^(?:(?:"[^"\r\n]*"|'[^'\r\n]*'|[^"';\r\n])*[;\r\n])*\s*'''
+    return rf'(?P<{name}>{prefix}{invocation})'
+
+
+WINDOWS_BEHAVIOR_REGEX_LIST = [
+    _windows_behavior_rule(
+        'win_ads_argument',
+        r'cscript|wscript|reg|regedit|regini|rundll32|mshta|control|certutil|'
+        r'diantz|esentutl|expand|extrac32|findstr|forfiles|makecab|mavinject|'
+        r'mpcmdrun|msxsl|print|printbrm|sc|tar|wmic',
+        rf'[^\r\n]*{_WINDOWS_ADS_ARGUMENT}',
+    ),
+    # Nhóm B — Scriptlet và stylesheet khác đăng ký DLL/truy vấn WMI thông thường.
+    _windows_behavior_rule(
+        'win_regsvr32_scriptlet', 'regsvr32',
+        r'(?=[^\r\n]*\s?/i:)(?=[^\r\n]*\bscrobj\.dll\b)[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_wmic_remote_stylesheet', 'wmic',
+        r'[^\r\n]*/format:\s*"?(?:https?://|\\\\)[^\r\n]+',
+    ),
+    # Nhóm C — Hook gọi shell và thực thi mã đã giải mã. Không khớp chỉ import/base64.
+    _windows_behavior_rule(
+        'win_git_shell_callback', 'git',
+        r'[^\r\n]*-c\s+["\x27]?(?:core\.(?:fsmonitor|pager)|pager\.[\w.-]+)'
+        r'\s*=\s*["\x27]?(?:cmd(?:\.exe)?\s+/[ck]|(?:powershell|pwsh)(?:\.exe)?\s+-)[^\r\n]*',
+    ),
+    _windows_behavior_rule(
+        'win_python_exec_base64', r'python(?:[23](?:\.\d+)?)?',
+        r'[^\r\n]*\s?-c\s+[^\r\n]*\bexec\s*\(\s*(?:base64\.)?b64decode\s*\(',
+    ),
+    # Nhóm D — Service bảo vệ khác service ứng dụng; start và stop được tách riêng.
+    _windows_behavior_rule('win_service_stop', r'net|net1', r'stop\s+[^\r\n]+'),
+    _windows_behavior_rule('win_service_start', r'net|net1', r'start\s+[^\r\n]+'),
+    _windows_behavior_rule(
+        'win_defense_service_stop', r'net|net1',
+        r'stop\s+"?(?:WinDefend|WdNisSvc|Sense|Windows Defender Antivirus Service)(?="|\s|$)',
+    ),
+    # BỔ SUNG 2026-11-11 khi rà windows_9: tắt khởi động service bảo vệ
+    # khác cấu hình service ứng dụng thông thường. Chỉ sinh feature.
+    _windows_behavior_rule(
+        'win_sc_defense_service_disable', 'sc',
+        r'(?:\\\\[^\\\s";|&]+\s+)?config\s+"?'
+        r'(?:WinDefend|WdNisSvc|Sense|Windows Defender Antivirus Service)"?\s+'
+        r'(?:(?:"[^"\r\n]*"|[^\s";|&]+)\s+)*start=\s*disabled(?=\s|[;|&]|$)',
+    ),
+    # Nhóm E — Registry: hive xác thực, IFEO Debugger và giá trị tắt bảo vệ.
+    _windows_behavior_rule('win_reg_save', 'reg', r'save\s+[^\r\n]+'),
+    _windows_behavior_rule(
+        'win_reg_sensitive_hive', 'reg',
+        r'(?:save|export)\s+"?(?:HKLM|HKEY_LOCAL_MACHINE)\\(?:SAM|SECURITY|SYSTEM)(?=["\s]|$)',
+    ),
+    _windows_behavior_rule(
+        'win_reg_ifeo_debugger', 'reg',
+        r'add\s+(?=[^\r\n]*\\Image File Execution Options\\)'
+        r'(?=[^\r\n]*/v\s+"?Debugger(?="|\s|$))[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_reg_protection_disable', 'reg',
+        r'add\s+(?=[^\r\n]*\\(?:Policies\\(?:System|Microsoft\\Windows\\System)|CurrentVersion\\Policies\\System))'
+        r'(?=[^\r\n]*/v\s+"?(?:EnableLUA|EnableSmartScreen|PromptOnSecureDesktop)(?="|\s|$))'
+        r'(?=[^\r\n]*/d\s+"?0(?="|\s|$))[^\r\n]+',
+    ),
+    # Nhóm F — Event log: đọc, xóa và tắt ghi log là các thao tác khác nhau.
+    _windows_behavior_rule('win_eventlog_clear', 'wevtutil', r'(?:cl|clear-log)\s+[^\r\n]+'),
+    _windows_behavior_rule(
+        'win_eventlog_disable', 'wevtutil',
+        r'(?:sl|set-log)\s+[^\r\n]*/(?:e|enabled):\s*false\b',
+    ),
+    _windows_behavior_rule(
+        'win_eventlog_read', 'wevtutil',
+        r'(?:el|enum-logs|gl|get-log|gp|get-publisher|qe|query-events|gli|get-log-info)(?=\s|$)[^\r\n]*',
+    ),
+    # Nhóm G — Các thao tác có tên rõ ràng trong mẫu LOLBAS/Commands Reference.
+    _windows_behavior_rule(
+        'win_dns_plugin_dll', 'dnscmd', r'[^\r\n]*/serverlevelplugindll\s+[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_browser_shell_callback', r'msedge|msedge_proxy|msedgewebview2|mscopilot|teams',
+        r'[^\r\n]*--(?:gpu-launcher|utility-cmd-prefix|renderer-cmd-prefix)='
+        r'"?(?:cmd(?:\.exe)?\s+/[ck]|(?:powershell|pwsh)(?:\.exe)?\s+-)[^\r\n]*',
+    ),
+    _windows_behavior_rule('win_certutil_hash', 'certutil', r'[^\r\n]*-hashfile\s+[^\r\n]+'),
+    _windows_behavior_rule('win_certutil_store', 'certutil', r'[^\r\n]*-(?:addstore|store|viewstore)(?=\s|$)[^\r\n]*'),
+    # Nhóm H — BỔ SUNG 2026-11-09 khi nhập mẫu có nguồn từ raw/Atomic Red Team.
+    # Tách callback/provider và target credential khỏi thao tác vận hành cùng tool.
+    _windows_behavior_rule(
+        'win_cmd_ads_io', 'cmd',
+        rf'(?:"[^"\r\n]*"|[^"\r\n<>])*[<>]\s*"?{_WINDOWS_ADS_ARGUMENT}',
+    ),
+    _windows_behavior_rule(
+        'win_wuauclt_custom_provider', 'wuauclt',
+        r'(?=[^\r\n]*/UpdateDeploymentProvider\s+)(?=[^\r\n]*/RunHandlerComServer\b)[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_credential_process_dump', r'procdump(?:64)?|adplus',
+        r'(?=[^\r\n]*(?<!\S)"?lsass(?:\.exe)?"?(?=\s|$))(?=[^\r\n]*\s?-(?:ma|mm|mp|hang)\b)[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_bits_execution_callback', 'bitsadmin', r'[^\r\n]*/SetNotifyCmdLine\s+[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_certutil_decode_code', 'certutil',
+        r'[^\r\n]*-decode(?:hex)?\s+(?:"[^"\r\n]+"|[^\s"&|]+)\s+'
+        r'(?:"[^"\r\n]+\.(?:exe|dll|jsp|aspx?|war)"|[^\s"&|]+\.(?:exe|dll|jsp|aspx?|war))(?=\s|[&|]|$)',
+    ),
+    _windows_behavior_rule(
+        'win_rundll32_proxy_exe', 'rundll32',
+        r'[^\r\n]*\b(?:advpack|ieadvpack)\.dll\s*,\s*RegisterOCX\s+[^\r\n]*\.exe(?=["\s]|$)',
+    ),
+    _windows_behavior_rule(
+        'win_ssh_remote_pkcs11', r'ssh|scp|sftp',
+        r'[^\r\n]*PKCS11Provider\s*=\s*"?\\\\[^\r\n]+',
+    ),
+    # Nhóm I — Đối chứng GOOD: App-V mặc định và nạp minifilter hợp lệ khác
+    # custom DLL injection hoặc gỡ minifilter bảo vệ. Chỉ sinh feature.
+    _windows_behavior_rule(
+        'win_mavinject_custom_library', 'mavinject',
+        r'\d+\s+/INJECTRUNNING\s+(?:"[^"\r\n]+\.dll"|[^\s"&|]+\.dll)(?=\s|$)',
+    ),
+    _windows_behavior_rule('win_filter_load', 'fltmc', r'load\s+[^\r\n]+'),
+    _windows_behavior_rule(
+        'win_security_filter_unload', 'fltmc',
+        r'unload\s+"?(?:SysmonDrv|WdFilter|Sense|vsepflt)(?="|\s|$)',
+    ),
+    _windows_behavior_rule(
+        'win_ntds_ifm_export', 'ntdsutil',
+        r'[^\r\n]*\bifm\b[^\r\n]*\bcreate\s+full\b',
+    ),
+    _windows_behavior_rule(
+        'win_troubleshooter_expression', r'msdt|pcwrun',
+        r'[^\r\n]*(?:/\.\./|\\\.\.\\)[^\r\n]*\$\(',
+    ),
+    # Nhóm J — BỔ SUNG 2026-11-10: đối chứng cùng công cụ từ LOLBAS/nguồn gốc.
+    # Phân biệt cơ chế trên CLI, không học IP/IOC/tên task và không ép verdict.
+    # Không gán mọi cài MSI qua mạng hoặc mọi Netsh add helper là BAD.
+    _windows_behavior_rule(
+        'win_msiexec_disguised_web_package', 'msiexec',
+        r'(?:/(?:i|package)|[^\r\n]*\s/(?:i|package))\s*"?'
+        r'https?://[^\s"\r\n]+\.(?:png|jpe?g|gif|ico|bmp)'
+        r'(?=[?\s"&|]|$)',
+    ),
+    _windows_behavior_rule(
+        'win_odbcconf_remote_registration', 'odbcconf',
+        r'(?=[^\r\n]*/a\s+\{\s*REGSVR\s+"?\\\\)[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_schtasks_remote_scriptlet', 'schtasks',
+        r'(?=[^\r\n]*/create\b)[^\r\n]*/tr\s+["\\]*'
+        r'(?:[^"\r\n]*[\\/])?regsvr32(?:\.exe)?["\\]*\s+'
+        r'(?=[^\r\n]*/i:https?://)(?=[^\r\n]*\bscrobj\.dll\b)[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_bash_socat_shell', 'bash',
+        r'(?:-c|[^\r\n]*\s-c)\s+["\x27]?(?:/usr/bin/)?socat\s+'
+        r'(?:TCP-CONNECT|TCP):[^\r\n]*\s+EXEC:(?:sh|bash)(?=[,\s"\x27]|$)[^\r\n]*',
+    ),
+    # Nhóm K — Chính sách ưu tiên cảnh báo Netsh helper từ vị trí rủi ro.
+    # Giữ đối chứng add helper hợp lệ; feature này không tự gán verdict BAD.
+    _windows_behavior_rule(
+        'win_netsh_helper_risky_location', 'netsh',
+        r'add\s+helper\s+'
+        rf'(?:"{_WINDOWS_NETSH_RISKY_DIRECTORY}[^"\r\n]+\.dll"'
+        rf'|{_WINDOWS_NETSH_RISKY_DIRECTORY}[^\s"&|<>]+\.dll)(?=\s|[&|]|$)',
+    ),
+    # Nhóm L — BỔ SUNG 2026-11-10: hành vi có rule cảnh báo, vẫn có thể hợp lệ.
+    # Chỉ sinh feature cho chính sách "cần điều tra". Không xác minh malware,
+    # độ hiếm trong doanh nghiệp, Image/ParentImage hoặc phê duyệt của quản trị.
+    _windows_behavior_rule(
+        'win_at_interactive_job', 'at',
+        r'(?:/interactive|[^\r\n]*\s/interactive)(?=\s|$)[^\r\n]*',
+    ),
+    _windows_behavior_rule(
+        'win_cdb_command_mode', 'cdb',
+        r'(?:-(?:c|cf)|[^\r\n]*\s-(?:c|cf))\s+(?:"[^"\r\n]+"|[^\s"&|<>]+)',
+    ),
+    _windows_behavior_rule(
+        'win_installutil_logging_suppressed', 'installutil',
+        r'(?=(?:/LogFile=|[^\r\n]*\s/LogFile=)(?=\s|$))'
+        r'(?=(?:/LogToConsole=false|[^\r\n]*\s/LogToConsole=false)(?=\s|$))[^\r\n]+',
+    ),
+    _windows_behavior_rule(
+        'win_vshadow_execution_callback', 'vshadow',
+        r'(?:-exec|[^\r\n]*\s-exec)(?:=|\s+)(?:"[^"\r\n]+"|[^\s"&|<>]+)',
+    ),
+    _windows_behavior_rule(
+        'win_hh_remote_resource', 'hh',
+        r'(?:"(?:https?://|\\\\)[^"\r\n]+"|(?:https?://|\\\\)[^\s"&|<>]+)',
+    ),
+    _windows_behavior_rule(
+        'win_remote_server_execution', 'remote',
+        r'[/\-]s\s+(?:"[^"\r\n]+"|[^\s"&|<>]+)',
+    ),
+    _windows_behavior_rule(
+        'win_replace_add_files', 'replace',
+        r'(?:[/\-]a|[^\r\n]*\s[/\-]a)(?=\s|$)[^\r\n]*',
+    ),
+    _windows_behavior_rule(
+        'win_dotnet_trace_child', 'dotnet-trace',
+        r'collect\s+(?:(?:"[^"\r\n]*"|[^\s"\r\n]+)\s+)*--\s+'
+        r'(?:"[^"\r\n]+"|[^\s"&|<>]+)',
+    ),
+
+    # Nhóm M — BỔ SUNG 2026-11-11: lời gọi PowerShell trong mẫu LOLBAS/NODLINK.
+    # Ghi nhận cơ chế nạp assembly, đăng ký snap-in và nhúng script vào ảnh.
+    # Tên file/IP không quyết định feature; feature không tự kết luận BAD.
+    _powershell_statement_rule(
+        'win_powershell_load_assembly_path',
+        r'LoadAssemblyFromPath\s+(?:"[^"\r\n]+\.dll"|\x27[^\x27\r\n]+\.dll\x27|[^\s;"\x27|&]+\.dll)(?=\s|[;|}]|$)',
+    ),
+    _powershell_statement_rule(
+        'win_powershell_register_snapin',
+        r'RegSnapin\s+(?:"[^"\r\n]+\.dll"|\x27[^\x27\r\n]+\.dll\x27|[^\s;"\x27|&]+\.dll)(?=\s|[;|}]|$)',
+    ),
+    _powershell_statement_rule(
+        'win_powershell_script_to_image',
+        r'Invoke-PSImage(?=\s)(?=[^;\r\n]*\s-Script\s+)(?=[^;\r\n]*\s-Out\s+)[^;\r\n]+',
+    ),
+    # Nhóm SSH — BỔ SUNG 2026-11-11 từ LOLBAS Ssh.yml, kỹ thuật T1202.
+    # Shell qua loopback là hành vi cần điều tra theo chính sách dataset.
+    # Feature này không xác minh ý đồ hoặc tự kết luận mọi SSH là BAD.
+    _windows_behavior_rule(
+        'win_ssh_loopback_shell', 'ssh',
+        r'(?:localhost|127\.0\.0\.1|\[?::1\]?)\s+"?'
+        r'(?:cmd(?:\.exe)?\s+/[ck](?=\s)|(?:powershell|pwsh)(?:\.exe)?\s+-)[^\r\n]+',
+    ),
+    # Nhóm N — Sửa rule SC cũ khớp nhầm chữ "sc" trong script/đường dẫn.
+    # Giữ tên feature cũ, chỉ nhận sc.exe ở vị trí thực thi và UNC là đối số đầu.
+    _windows_behavior_rule('sc_remote', 'sc', r'\\\\[^\\\s";|&]+(?=\s|$)'),
+    _windows_behavior_rule(
+        'sc_start_remote', 'sc', r'\\\\[^\\\s";|&]+\s+start(?=\s|$)',
+    ),
+    _windows_behavior_rule(
+        'sc_start', 'sc', r'(?:\\\\[^\\\s";|&]+\s+)?start(?=\s|$)',
+    ),
+]
+
+WINDOWS_REGEX_LIST += WINDOWS_BEHAVIOR_REGEX_LIST
 

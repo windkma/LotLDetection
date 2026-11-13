@@ -12,6 +12,9 @@ _RE_IPV4 = re.compile(
     r"(?<![\w.])(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])"
     r"(?:\.(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}(?![\w.])"
 )
+# Match the complete hostname in URLs, UNC paths and host arguments.
+# Exclude domains/file names such as localhost.example.com and localhost.txt.
+_RE_LOCALHOST = re.compile(r"(?<![\w.-])localhost(?![\w.-])", re.IGNORECASE)
 _COMMAND_TOKEN = re.compile(r'"[^"\r\n]*"|[^\s]+')
 _POWERSHELL_NAMES = {"powershell", "powershell.exe", "pwsh", "pwsh.exe"}
 _CMD_NAMES = {"cmd", "cmd.exe"}
@@ -182,11 +185,13 @@ def windows_analysis_views(command):
 
 def extract_ip_labels(command: str) -> list:
     """
-    Extract IPv4 addresses and classify into semantic network labels:
+    Recognize the localhost hostname and classify IPv4 addresses:
     IP_LOOPBACK, IP_PRIVATE, IP_LINK_LOCAL, IP_MULTICAST, IP_RESERVED,
     IP_PUBLIC, IP_UNSPECIFIED.
     """
     labels = {}
+    if _RE_LOCALHOST.search(str(command)):
+        labels['IP_LOOPBACK'] = 0
     try:
         matches = _RE_IPV4.finditer(f" {command} ")
         for match in matches:

